@@ -41,7 +41,7 @@ window.innerStore.dispatch = loggyDispatch;
 var loggySubscriber = () => {
     console.log("state changed")
 }
-window.innerStore.store.subscribe(loggySubscriber);
+window.innerStore.subscribe(loggySubscriber);
 ```
 
 ## Chat Sending
@@ -132,6 +132,42 @@ Podium.keydown(13, el);
 ### An unminified source but packaged version of redux for inspection:
 
 https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.js
+
+### An unminified source of Rx
+
+https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.js
+
+## Moving Users to Bo Related
+
+### Taxonomy
+
+* Two types:
+    * `assignUnassignedUserToBo`
+        * User joins in while breakout rooms are in progress. But isn't assigned.
+        * Assigned to `assignUnassignedUserToBo` via a `assignUnassignedUserToBo:`
+    * `moveUserToBo`
+        * User is already assigned to breakout room.
+        * Assigned to `moveUserToBo` via a `moveUserToBo:`
+
+* Dispatch these function calls.
+* Arguments
+    1. `userId`
+        * Some numerical thing. Can be found in store.
+    2. `zoomId`
+        * Some hashy random string thing. Can be found in store
+    3. `boId`
+        * Some GUID that is the Breakout Room eg. `{C142B5E0-11D7-47AB-D65D-4AB7B638BC99}`, with curly braces.
+
+### Functions of note:
+
+* Something that checks if the user is the host and has `WS_CONF_BO_ASSIGN_REQ` in it
+* Something that checks if the user is the host and has `WS_CONF_BO_ASSIGN_REQ` in it
+
+### Rough Steps needed for emulation
+
+1. Dispatch function to send command to backend
+    * Cares if the user is already assigned. Must send different one
+    * Will update GUI automatically!
 
 
 [nomeetingchatapi]: https://devforum.zoom.us/t/in-meeting-chats/26572

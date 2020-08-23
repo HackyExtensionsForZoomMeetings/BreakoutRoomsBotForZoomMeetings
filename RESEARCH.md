@@ -168,6 +168,7 @@ https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.js
 1. Dispatch function to send command to backend
     * Cares if the user is already assigned. Must send different one
     * Will update GUI automatically!
+    * Unreliable. Seems to lose scope/effectivity after a period.
 
 
 [nomeetingchatapi]: https://devforum.zoom.us/t/in-meeting-chats/26572

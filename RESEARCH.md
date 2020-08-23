@@ -129,7 +129,9 @@ Podium.keydown = function(k, el) {
 Podium.keydown(13, el);
 ```
 
+### An unminified source but packaged version of redux for inspection:
 
+https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.js
 
 
 [nomeetingchatapi]: https://devforum.zoom.us/t/in-meeting-chats/26572

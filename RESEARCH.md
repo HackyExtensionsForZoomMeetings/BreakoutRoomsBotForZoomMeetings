@@ -186,8 +186,8 @@ https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.js
 
 ```javascript
 {
-  type: 'SET_CHAT_TYPE',
-  payload: 1
+  type: 'SET_MANAGE_BO_ROOMS_WINDOW_VISIBLE',
+  payload: true
 }
 ```
 

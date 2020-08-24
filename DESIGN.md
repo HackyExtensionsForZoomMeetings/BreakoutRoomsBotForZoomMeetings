@@ -4,11 +4,9 @@
     * Start Breakout Rooms
     * Assign a user to a breakout room
     * Open Rooms
-1. Using React Devtools, `$r.props.store.dispatch()` to
-    * Enable Chat Window
-        * Need input element to send Breakout room bot response
-    * Enable Breakout Room Window
-        * Need pretty much every element
+    * Have Breakout Rooms Window Open
+    * Have Chat Window Open
+1. Have React Devtools so that `$r.props.store.getState()` is available.
 1. Using Browser Automation
     * Expand every list of the Breakout Room Window
 1. Include RxJS into window

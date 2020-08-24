@@ -200,5 +200,19 @@ https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.js
 }
 ```
 
+## RxJS Stuff
+
+### Get store as an observable
+
+```javascript
+function getState$(store) {
+  return new rxjs.Observable(function (observer) {
+    const unsubscribe = store.subscribe(function () {
+      observer.next(store.getState());
+    });
+  });
+}
+```
+
 
 [nomeetingchatapi]: https://devforum.zoom.us/t/in-meeting-chats/26572

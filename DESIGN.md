@@ -13,6 +13,8 @@
 1. RxJS subscribe to state changes
 1. Pipeline
     1. Chat Messages is scanned for commands
+        * `!version`
+            - Send a message to the Chat with a version string
         * `!ls`
             - Send a message to the Chat with a list of breakout rooms and names with index
                 - Simple call to Browser Automation

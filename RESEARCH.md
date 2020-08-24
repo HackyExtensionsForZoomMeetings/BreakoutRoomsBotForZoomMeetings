@@ -180,5 +180,25 @@ https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.js
     * Will update GUI automatically!
     * Unreliable. Seems to lose scope/effectivity after a period.
 
+## Make things visible
+
+### Visible Breakout Rooms
+
+```javascript
+{
+  type: 'SET_CHAT_TYPE',
+  payload: 1
+}
+```
+
+### Visible Chat
+
+```javascript
+{
+  type: 'SET_CHAT_TYPE',
+  payload: 1
+}
+```
+
 
 [nomeetingchatapi]: https://devforum.zoom.us/t/in-meeting-chats/26572

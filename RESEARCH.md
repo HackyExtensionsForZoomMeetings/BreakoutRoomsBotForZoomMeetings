@@ -129,6 +129,16 @@ Podium.keydown = function(k, el) {
 Podium.keydown(13, el);
 ```
 
+### Send a mouseover
+
+```javascript
+function reactMouseOver(el) {
+    var oEvent = document.createEvent('MouseEvent');
+    oEvent.initMouseEvent("mouseover", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    el.dispatchEvent(oEvent);
+}
+```
+
 ### An unminified source but packaged version of redux for inspection:
 
 https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.5/redux.js

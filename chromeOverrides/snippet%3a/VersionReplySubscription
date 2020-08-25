@@ -1,0 +1,7 @@
+var versionReplySubscription = userMessageMapObservable.subscribe(
+    ({sender, message}) => {
+        if (message == "!version") {
+            ChatboxSend("here's the version, choke on it.")
+        }
+    }
+)

@@ -1,0 +1,24 @@
+function reactMouseOver(el) {
+    var oEvent = document.createEvent('MouseEvent');
+    oEvent.initMouseEvent("mouseover", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    el.dispatchEvent(oEvent);
+}
+
+function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
+    var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName},Not Joined"]`);
+    reactMouseOver(attendeeEl);
+    var clickMoveToButtonInterval = setInterval(function() {
+        if (document.querySelector('.bo-room-item-attendee__tools')) {
+            document.querySelector('.bo-room-item-attendee__tools > button').click()
+            var selectRoomClickInterval = setInterval(function() {
+                if (document.querySelector(`.zmu-data-selector-item[aria-label^="${roomName},"]`)) {
+                    document.querySelector(`.zmu-data-selector-item[aria-label^="${roomName},"]`).click()
+                    clearInterval(selectRoomClickInterval);
+                }
+            }, 100);
+            // check every 100ms
+            clearInterval(clickMoveToButtonInterval);
+        }
+    }, 100);
+    // check every 100ms
+}

@@ -14,19 +14,19 @@ function chatboxSend(msg) {
     const chatboxElement = document.getElementsByClassName('chat-box__chat-textarea')[0];
     const nativeTextAreaValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
     nativeTextAreaValueSetter.call(chatboxElement, msg);
-    chatboxElement.dispatchEvent(new Event('input', { bubbles: true}));
+    chatboxElement.dispatchEvent(new Event('input', { bubbles: true }));
 
     const oEvent = document.createEvent('KeyboardEvent');
     // Chromium Hack
     Object.defineProperty(oEvent, 'keyCode', {
-                get : function() {
-                    return this.keyCodeVal;
-                }
+        get: function () {
+            return this.keyCodeVal;
+        }
     });
     Object.defineProperty(oEvent, 'which', {
-                get : function() {
-                    return this.keyCodeVal;
-                }
+        get: function () {
+            return this.keyCodeVal;
+        }
     });
 
     const k = 13;
@@ -47,10 +47,10 @@ function reactMouseOver(el) {
 function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
     var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName},Not Joined"]`);
     reactMouseOver(attendeeEl);
-    var clickMoveToButtonInterval = setInterval(function() {
+    var clickMoveToButtonInterval = setInterval(function () {
         if (document.querySelector('.bo-room-item-attendee__tools')) {
             document.querySelector('.bo-room-item-attendee__tools > button').click()
-            var selectRoomClickInterval = setInterval(function() {
+            var selectRoomClickInterval = setInterval(function () {
                 if (document.querySelector(`.zmu-data-selector-item[aria-label^="${roomName},"]`)) {
                     document.querySelector(`.zmu-data-selector-item[aria-label^="${roomName},"]`).click()
                     clearInterval(selectRoomClickInterval);
@@ -77,7 +77,7 @@ var chatObservable = storeObservable.pipe(
 )
 
 var userMessageMapObservable = chatObservable.pipe(
-    rxjs.operators.map(chatState=>{
+    rxjs.operators.map(chatState => {
         return {
             sender: chatState.slice(-1)[0].sender,
             message: chatState.slice(-1)[0].chatMsgs.slice(-1)[0],
@@ -87,14 +87,9 @@ var userMessageMapObservable = chatObservable.pipe(
     rxjs.operators.refCount(),
 )
 
-// SUBSCRIPTIONS
-
-var versionReplySubscription = userMessageMapObservable.subscribe(
-    ({sender, message}) => {
-        if (message == "!version") {
-            chatboxSend(`BreakoutRoomBot ${BREAKOUT_ROOM_BOT_VERSION} | github.com/nelsonjchen/HackyZoomBreakoutBot`)
-        }
-    }
+var versionReplyObservable = userMessageMapObservable.pipe(
+    rxjs.operators.filter(({ _, message }) => message == "!version"),
+    rxjs.operators.map((_) => `BreakoutRoomBot ${BREAKOUT_ROOM_BOT_VERSION} | github.com/nelsonjchen/HackyZoomBreakoutBot`)
 )
 
 var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
@@ -108,6 +103,13 @@ var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
         ).join('\n')
     ),
 )
+
+// SUBSCRIPTIONS
+
+var versionReplySubscription = versionReplyObservable.subscribe(
+    (message) => chatboxSend(message)
+)
+
 
 var breakoutRoomListReplySubscription = breakoutRoomListReplyObservable.subscribe(
     (message) => chatboxSend(message)

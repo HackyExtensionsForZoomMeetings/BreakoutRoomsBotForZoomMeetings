@@ -100,7 +100,7 @@ var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
         "Breakout Room List\n" +
         "Chat \"!ls\" to see this list\n" +
         state.breakoutRoom.roomList.map(
-            (room, index) => `Chat "!mv ${index}" to be assigned to ${room.name}`
+            (room, index) => `Chat "!mv ${index + 1}" to be assigned to ${room.name}`
         ).join('\n')
     ),
 )
@@ -127,11 +127,15 @@ var moveRequestObservable = userMessageMapObservable.pipe(
                 )
             );
 
-            if (roomId >= storeState.breakoutRoom.roomList.length) {
+            if (roomId <= 0) {
                 return `@${sender} Room ID out of range!`
             }
 
-            var room = storeState.breakoutRoom.roomList[roomId];
+            if (roomId > storeState.breakoutRoom.roomList.length) {
+                return `@${sender} Room ID out of range!`
+            }
+
+            var room = storeState.breakoutRoom.roomList[roomId - 1];
             var roomAttendeesByName = room.attendeeIdList.map(attendeeId => guidSenderMap.get(attendeeId));
 
             if (roomAttendeesByName.includes(sender)) {

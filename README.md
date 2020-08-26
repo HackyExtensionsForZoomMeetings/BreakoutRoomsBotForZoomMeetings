@@ -1,6 +1,6 @@
 # Hacky Zoom Breakout "Bot"
 
-*Making it possible for **everyone** to walk around in a Zoom Meeting with Breakout Rooms!**
+*Making it possible for **everyone** to walk around to other Breakout Rooms in a Zoom Meeting*
 
 ![In Action](./img/in_action.png)
 

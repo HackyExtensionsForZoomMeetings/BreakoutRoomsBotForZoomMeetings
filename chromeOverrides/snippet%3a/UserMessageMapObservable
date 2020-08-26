@@ -1,8 +1,0 @@
-var userMessageMapObservable = chatObservable.pipe(
-    rxjs.operators.map(chatState=>{
-        return {
-            sender: chatState.slice(-1)[0].sender,
-            message: chatState.slice(-1)[0].chatMsgs.slice(-1)[0],
-        }
-    }),    
-)

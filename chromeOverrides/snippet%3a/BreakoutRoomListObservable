@@ -1,6 +1,0 @@
-var BreakoutRoomListReplySubscription = userMessageMapObservable.pipe(
-    rxjs.operators.filter(({ _ , message}) => message == "!ls"),    
-    rxjs.operators.withLatestFrom(storeObservable, (_, state) => 
-        "Breakout Room List\n" + state.breakoutRoom.roomList.map( (room, index) => `Chat "!mv ${index}" to be assigned to ${room.name}`).join('\n') + "\nSay \"!ls\" to see this message"
-    ),
-)

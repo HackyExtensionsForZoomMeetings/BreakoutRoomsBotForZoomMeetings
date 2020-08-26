@@ -1,5 +1,0 @@
-var chatObservable = storeObservable.pipe(
-    rxjs.operators.map(s => s.chat.meetingChat),
-    rxjs.operators.distinctUntilChanged(),
-    rxjs.operators.filter(a => a.length != 0),
-)

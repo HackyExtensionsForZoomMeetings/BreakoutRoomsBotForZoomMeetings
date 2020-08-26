@@ -99,6 +99,7 @@ Hopefully, great demand for such a feature will manifest in an API or support to
 17. Have another attendee chat some `!mv` option and ensure the attendee is moved.
     ![test](./img/test.png)
 18. If all goes well, the attendee should be moved to a breakout room.
+19. The Breakout Rooms Window and the Group Chat Window *must remain visible* for this bot to continue working. Do not close them or the bot cannot perform actions.
 
 ## Usage (As Attendee)
 

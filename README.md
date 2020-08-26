@@ -84,7 +84,10 @@ Hopefully, great demand for such a feature will manifest in an API or support to
     ![pasted RXJS](./img/pasted_rxjs.png)
 12. Click on the Components Tab of the Developer Tool and select the "root" element in the panel that opens.
     * ![select root react element](./img/select_root_react.png)
-    * **Make sure the root element is selected and highlighted**. In the picture above, the row `c` should be completely highlighted. You should be able to move your mouse around and `c` would still be highlighted.
+        1. Select Components Tab
+        2. Make sure the root element is selected. (`c` here)
+        3. You should see the properties of the selected element with "`props`" and "`store`".
+    * **Make sure the root element is selected and highlighted**. In the picture above, the row `c` should be completely highlighted. You should be able to move your mouse around and `c` would still be highlighted. Additionally,
     * The Components tab may be hidden in a dropdown menu:
             ![component_overflow](./img/component_overflow.png)
     * Missing this step will cause some sort of error saying `$r.props.store` can't be found or is undefined.

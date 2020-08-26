@@ -17,7 +17,7 @@ The bot allows attendees to self-serve switching between breakout rooms function
 
 The interface for attendees is the Group Chat feature. Attendees can chat `!ls` to get a list of rooms and corresponding `!mv` commands to be assigned to a room.
 
-This bot is **quite** hacky and uses undocumented APIs/moxie! But it is almost unmatched out there except for [a bot trying to OCR a Mac client's screen and doing simular stuff][ocrbreakoutroombot]. Functionality is made possible by operating on the web client where the UI is relatively malleable and the internal state of client is somewhat accessible. By this nature, **the bot is very hacky and is expected to break someday.**
+This bot is **quite** hacky and uses undocumented APIs/moxie! But it is almost unmatched out there except for [a bot trying to OCR a Mac client's screen and doing similar stuff][ocrbreakoutroombot]. Functionality is made possible by operating on the web client where the UI is relatively malleable and the internal state of client is somewhat accessible. By this nature, **the bot is very hacky and is expected to break someday.**
 
 Let's start with the limitations and possible mitigations as they may be deal breakers:
 

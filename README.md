@@ -102,6 +102,8 @@ Hopefully, great demand for such a feature will manifest in an API or support to
 
 ## Usage (As Attendee)
 
+**These commands only work in the main or root Zoom meeting**. If you're in a breakout room, you can return to the main or root Zoom meeting from a Breakout room by selecting End Meeting in a Breakout Room and selecting Leave Breakout room.
+
 * `!ls` List Rooms
 * `!mv <room id>` Move to breakout room ID. List of IDs can be found with `!ls`.
 * `!version` Have the bot print out the version.

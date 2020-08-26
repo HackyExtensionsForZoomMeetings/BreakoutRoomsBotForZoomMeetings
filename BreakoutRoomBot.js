@@ -132,11 +132,11 @@ var moveRequestObservable = userMessageMapObservable.pipe(
             );
 
             if (roomId <= 0) {
-                return `⚠️ @${sender} Room ID out of range!\n` + genericHelpMessage
+                return `⚠️ @${sender} Room ID "${roomIdStr}" out of range!\n` + genericHelpMessage
             }
 
             if (roomId > storeState.breakoutRoom.roomList.length) {
-                return `⚠️ @${sender} Room ID out of range!\n` + genericHelpMessage
+                return `⚠️ @${sender} Room ID "${roomIdStr}" out of range!\n` + genericHelpMessage
             }
 
             var room = storeState.breakoutRoom.roomList[roomId - 1];
@@ -146,9 +146,13 @@ var moveRequestObservable = userMessageMapObservable.pipe(
                 return `⚠️ Requester "${sender}" already in "${room.name}"\n` + genericHelpMessage
             }
 
+            if (Array.from(guidSenderMap.values()).filter(x => x == sender).length > 1) {
+                return `⚠️ "${sender}" must have a unique name in the meeting for this to operate. "${sender}"s, please rename to unique names.\n` + genericHelpMessage
+            }
+
             assignedUnjoinedUserToBreakoutRoom(sender, room.name);
 
-            return `🎯 Assigning "${sender}" to "${room.name}"`
+            return `🎯 Assigning "${sender}" to "${room.name}"\n` + genericHelpMessage
         }
     ),
 )

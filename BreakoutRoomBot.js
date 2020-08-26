@@ -76,6 +76,7 @@ var chatObservable = storeObservable.pipe(
     rxjs.operators.refCount(),
 )
 
+
 var userMessageMapObservable = chatObservable.pipe(
     rxjs.operators.map(chatState => {
         return {
@@ -104,6 +105,47 @@ var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
     ),
 )
 
+var moveRequestObservable = userMessageMapObservable.pipe(
+    rxjs.operators.filter(({ _, message }) => message.startsWith("!mv ")),
+    rxjs.operators.map( ({ sender, message }) =>
+    {
+        return {
+            sender: sender,
+            roomIdStr: message.substring(4),
+        }
+    }),
+    rxjs.operators.withLatestFrom(
+        storeObservable,
+        ({ sender, roomIdStr}, storeState) => {
+            if (!/^\d+$/.test(roomIdStr)) {
+                return "Room ID must be an integer"
+            }
+            var roomId = parseInt(roomIdStr, 10);
+
+            var guidSenderMap = new Map(
+                storeState.attendeesList.attendeesList.map(
+                    attendee => [ attendee.userGUID, attendee.displayName]
+                )
+            );
+
+            if (roomId >= storeState.breakoutRoom.roomList.length) {
+                return "Room ID out of range"
+            }
+
+            var room = storeState.breakoutRoom.roomList[roomId];
+            var roomAttendeesByName = room.attendeeIdList.map(attendeeId => guidSenderMap.get(attendeeId));
+
+            if (sender in roomAttendeesByName){
+                return "Requester already in room"
+            }
+
+            assignedUnjoinedUserToBreakoutRoom(sender, room.name);
+
+            return `Assigning ""${sender}" to "${room.name}"`
+        }
+    ),
+)
+
 // SUBSCRIPTIONS
 
 var versionReplySubscription = versionReplyObservable.subscribe(
@@ -112,5 +154,9 @@ var versionReplySubscription = versionReplyObservable.subscribe(
 
 
 var breakoutRoomListReplySubscription = breakoutRoomListReplyObservable.subscribe(
+    (message) => chatboxSend(message)
+)
+
+var moveRequestSubscription = moveRequestObservable.subscribe(
     (message) => chatboxSend(message)
 )

@@ -140,7 +140,7 @@ var moveRequestObservable = userMessageMapObservable.pipe(
 
             assignedUnjoinedUserToBreakoutRoom(sender, room.name);
 
-            return `Assigning ""${sender}" to "${room.name}"`
+            return `Assigning "${sender}" to "${room.name}"`
         }
     ),
 )

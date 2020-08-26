@@ -109,6 +109,7 @@ var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
 
 var moveRequestObservable = userMessageMapObservable.pipe(
     rxjs.operators.filter(({ _, message }) => message.startsWith("!mv ")),
+    rxjs.operators.throttle(_ => rxjs.interval(300)),
     rxjs.operators.map(({ sender, message }) => {
         return {
             sender: sender,

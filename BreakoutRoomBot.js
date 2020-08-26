@@ -139,7 +139,7 @@ var moveRequestObservable = userMessageMapObservable.pipe(
             var roomAttendeesByName = room.attendeeIdList.map(attendeeId => guidSenderMap.get(attendeeId));
 
             if (roomAttendeesByName.includes(sender)) {
-                return `Requester ""${sender}" already in "${room.name}"`
+                return `Requester "${sender}" already in "${room.name}"`
             }
 
             assignedUnjoinedUserToBreakoutRoom(sender, room.name);

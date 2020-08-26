@@ -90,18 +90,20 @@ var userMessageMapObservable = chatObservable.pipe(
 
 var versionReplyObservable = userMessageMapObservable.pipe(
     rxjs.operators.filter(({ _, message }) => message == "!version"),
-    rxjs.operators.map((_) => `BreakoutRoomBot ${BREAKOUT_ROOM_BOT_VERSION} | github.com/nelsonjchen/HackyZoomBreakoutBot`)
+    rxjs.operators.map((_) => `🤖💔 BreakoutRoomBot ${BREAKOUT_ROOM_BOT_VERSION}\ngithub.com/nelsonjchen/HackyZoomBreakoutBot`)
 )
 
 var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
     rxjs.operators.filter(({ _, message }) => message == "!ls"),
     rxjs.operators.withLatestFrom(
         storeObservable, (_, state) =>
-        "Breakout Room List\n" +
+        "📜 Breakout Room List\n" +
         "Chat \"!ls\" to see this list\n" +
         state.breakoutRoom.roomList.map(
-            (room, index) => `Chat "!mv ${index + 1}" to be assigned to ${room.name}`
-        ).join('\n')
+            (room, index) => `Chat "!mv ${index + 1}" into Group Chat to be assigned to Breakout Room "${room.name}"`
+        ).join('\n') +
+        "\n" +
+        "End of List"
     ),
 )
 
@@ -116,8 +118,10 @@ var moveRequestObservable = userMessageMapObservable.pipe(
     rxjs.operators.withLatestFrom(
         storeObservable,
         ({ sender, roomIdStr }, storeState) => {
+            const genericHelpMessage = "❓ Chat \"!ls\" to list rooms and other commands."
+
             if (!/^\d+$/.test(roomIdStr)) {
-                return `@${sender} Room ID must be an integer`
+                return `⚠️ @${sender} Room ID must be an integer.\n` + genericHelpMessage
             }
             var roomId = parseInt(roomIdStr, 10);
 
@@ -128,23 +132,23 @@ var moveRequestObservable = userMessageMapObservable.pipe(
             );
 
             if (roomId <= 0) {
-                return `@${sender} Room ID out of range!`
+                return `⚠️ @${sender} Room ID out of range!\n` + genericHelpMessage
             }
 
             if (roomId > storeState.breakoutRoom.roomList.length) {
-                return `@${sender} Room ID out of range!`
+                return `⚠️ @${sender} Room ID out of range!\n` + genericHelpMessage
             }
 
             var room = storeState.breakoutRoom.roomList[roomId - 1];
             var roomAttendeesByName = room.attendeeIdList.map(attendeeId => guidSenderMap.get(attendeeId));
 
             if (roomAttendeesByName.includes(sender)) {
-                return `Requester "${sender}" already in "${room.name}"`
+                return `⚠️ Requester "${sender}" already in "${room.name}"\n` + genericHelpMessage
             }
 
             assignedUnjoinedUserToBreakoutRoom(sender, room.name);
 
-            return `Assigning "${sender}" to "${room.name}"`
+            return `🎯 Assigning "${sender}" to "${room.name}"`
         }
     ),
 )

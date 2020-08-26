@@ -90,7 +90,7 @@ Hopefully, great demand for such a feature will manifest in an API or support to
     * Missing this step will cause some sort of error saying `$r.props.store` can't be found or is undefined.
 13. Return to the Console.
 14. Copy the contents of the bot's source to your clipboard. Press Ctrl-A or Cmd-A to select the whole file and then press Ctrl-C or Cmd-C to copy it.
-    * https://raw.githubusercontent.com/nelsonjchen/HackyZoomBreakoutBot/BreakoutRoomBot.js
+    * https://raw.githubusercontent.com/nelsonjchen/HackyZoomBreakoutBot/master/BreakoutRoomBot.js
 15. Paste the clipboard or contents of the file into the Console where you ran `console.log("hello")` earlier and run it.
 16. Have another attendee chat `!ls`. You should get a list.
 17. Have another attendee chat some `!mv` option and ensure the attendee is moved.

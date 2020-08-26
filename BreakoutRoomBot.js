@@ -107,8 +107,7 @@ var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
 
 var moveRequestObservable = userMessageMapObservable.pipe(
     rxjs.operators.filter(({ _, message }) => message.startsWith("!mv ")),
-    rxjs.operators.map( ({ sender, message }) =>
-    {
+    rxjs.operators.map(({ sender, message }) => {
         return {
             sender: sender,
             roomIdStr: message.substring(4),
@@ -116,27 +115,27 @@ var moveRequestObservable = userMessageMapObservable.pipe(
     }),
     rxjs.operators.withLatestFrom(
         storeObservable,
-        ({ sender, roomIdStr}, storeState) => {
+        ({ sender, roomIdStr }, storeState) => {
             if (!/^\d+$/.test(roomIdStr)) {
-                return "Room ID must be an integer"
+                return `@${sender} Room ID must be an integer`
             }
             var roomId = parseInt(roomIdStr, 10);
 
             var guidSenderMap = new Map(
                 storeState.attendeesList.attendeesList.map(
-                    attendee => [ attendee.userGUID, attendee.displayName]
+                    attendee => [attendee.userGUID, attendee.displayName]
                 )
             );
 
             if (roomId >= storeState.breakoutRoom.roomList.length) {
-                return "Room ID out of range"
+                return `@${sender} Room ID out of range!`
             }
 
             var room = storeState.breakoutRoom.roomList[roomId];
             var roomAttendeesByName = room.attendeeIdList.map(attendeeId => guidSenderMap.get(attendeeId));
 
-            if (sender in roomAttendeesByName){
-                return "Requester already in room"
+            if (roomAttendeesByName.includes(sender)) {
+                return `Requester ""${sender}" already in "${room.name}"`
             }
 
             assignedUnjoinedUserToBreakoutRoom(sender, room.name);
@@ -160,3 +159,9 @@ var breakoutRoomListReplySubscription = breakoutRoomListReplyObservable.subscrib
 var moveRequestSubscription = moveRequestObservable.subscribe(
     (message) => chatboxSend(message)
 )
+
+// Open the chat pane if it isn't already open.
+var chatPaneButton = document.querySelector('[aria-label^="open the chat pane"]')
+if (chatPaneButton) {
+    chatPaneButton.click();
+}

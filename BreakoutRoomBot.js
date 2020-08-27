@@ -63,7 +63,9 @@ function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
 
 // OBSERVABLES
 
-var storeObservable = getStoreObservable($r.props.store).pipe(
+var internalStore = document.getElementById('root')._reactRootContainer._internalRoot.current.child.pendingProps.store;
+
+var storeObservable = getStoreObservable(internalStore).pipe(
     rxjs.operators.publish(),
     rxjs.operators.refCount(),
 )

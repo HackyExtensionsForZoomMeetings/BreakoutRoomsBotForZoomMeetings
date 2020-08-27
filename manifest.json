@@ -1,0 +1,14 @@
+{
+  "name": "Hacky The Zoom Bot",
+  "version": "1.0",
+  "description": "Hacky the zoom bot will help you with breakout rooms",
+  "permissions": ["activeTab", "declarativeContent"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html"
+  },
+ "manifest_version": 2
+}

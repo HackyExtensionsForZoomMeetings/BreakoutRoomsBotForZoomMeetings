@@ -10,5 +10,8 @@
   "page_action": {
     "default_popup": "popup.html"
   },
- "manifest_version": 2
+  "web_accessible_resources": [
+    "BreakoutRoomBot.js"
+  ],
+  "manifest_version": 2
 }

@@ -6,13 +6,29 @@
 
 let launcher = document.getElementById('launcher');
 
-launcher.onclick = function(element) {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      chrome.tabs.executeScript(
-          tabs[0].id,
-          {code: 'var rxjs = document.createElement("script");' +
-                 'rxjs.setAttribute("src","https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.min.js");' +
-                 'document.head.appendChild(rxjs);'
-          });
-    });
+launcher.onclick = function (element) {
+    chrome.tabs.query(
+        { active: true, currentWindow: true },
+        function (tabs) {
+            chrome.tabs.executeScript(
+                tabs[0].id,
+                {
+                    code: 'var rxjs = document.createElement("script");' +
+                        'rxjs.setAttribute("src","https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.min.js");' +
+                        'document.head.appendChild(rxjs);'
+                }
+            );
+            var url = chrome.runtime.getURL('BreakoutRoomBot.js')
+            setTimeout(_ => {
+                chrome.tabs.executeScript(
+                    tabs[0].id,
+                    {
+                        code: 'var bbSource = document.createElement("script");' +
+                            `bbSource.setAttribute("src","${url}");` +
+                            'document.head.appendChild(bbSource);'
+                    }
+                );
+            }, 300);
+        }
+    );
 }

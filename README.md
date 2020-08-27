@@ -29,9 +29,6 @@ Let's start with the limitations and possible mitigations as they may be deal br
 
 There are also some oddities of note as well:
 
-* The "React Developer Tools" extension is required.
-    * https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en
-    * I was unable to figure out any other way to access the internal state of the Zoom Meetings Web Client without the help of this extension.
 * The Breakout Room setup will require at least two users to be in the meeting and the Breakout Rooms to have been be created and started. This can be accomplished all by yourself, if needed.
 * You will need to copy and paste huge pieces of Javascript. You can save them as snippets though for easy recall.
 
@@ -52,8 +49,6 @@ Hopefully, great demand for such a feature will manifest in an API or support to
         ![Enable Web Meeting Always Setting](./img/enable_web_meeting_always.png)
     * Alternatively, but annoyingly, you can also press the "Download and Run Zoom" link, ***not** run the EXE, or installer*, and then the "Join from your web browser" link will show:
         ![Join From Browser](./img/join_from_browser.png)
-* The "React Developer Tools" extension is **required**. Install this extension to the Host's browser.
-    * https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en
 
 ### Host Setup
 
@@ -82,24 +77,14 @@ Hopefully, great demand for such a feature will manifest in an API or support to
         * https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.js
 11. Paste the clipboard or contents of the file into the Console where you ran `console.log("hello")` earlier and run it.
     ![pasted RXJS](./img/pasted_rxjs.png)
-12. Click on the Components Tab of the Developer Tool and select the "root" element in the panel that opens.
-    * ![select root react element](./img/select_root_react.png)
-        1. Select Components Tab
-        2. Make sure the root element is selected. (`c` here)
-        3. You should see the properties of the selected element with "`props`" and "`store`".
-    * **Make sure the root element is selected and highlighted**. In the picture above, the row `c` should be completely highlighted. You should be able to move your mouse around and `c` would still be highlighted. Additionally,
-    * The Components tab may be hidden in a dropdown menu:
-            ![component_overflow](./img/component_overflow.png)
-    * Missing this step will cause some sort of error saying `$r.props.store` can't be found or is undefined.
-13. Return to the Console.
-14. Copy the contents of the bot's source to your clipboard. Press Ctrl-A or Cmd-A to select the whole file and then press Ctrl-C or Cmd-C to copy it.
+12. Copy the contents of the bot's source to your clipboard. Press Ctrl-A or Cmd-A to select the whole file and then press Ctrl-C or Cmd-C to copy it.
     * https://raw.githubusercontent.com/nelsonjchen/HackyZoomBreakoutBot/master/BreakoutRoomBot.js
-15. Paste the clipboard or contents of the file into the Console where you ran `console.log("hello")` earlier and run it.
-16. Have another attendee chat `!ls`. You should get a list.
-17. Have another attendee chat some `!mv` option and ensure the attendee is moved.
+13. Paste the clipboard or contents of the file into the Console where you ran `console.log("hello")` earlier and run it.
+14. Have another attendee chat `!ls`. You should get a list.
+15. Have another attendee chat some `!mv` option and ensure the attendee is moved.
     ![test](./img/test.png)
-18. If all goes well, the attendee should be moved to a breakout room.
-19. The Breakout Rooms Window and the Group Chat Window *must remain visible* for this bot to continue working. Do not close them or the bot cannot perform actions.
+16. If all goes well, the attendee should be moved to a breakout room.
+17. The Breakout Rooms Window and the Group Chat Window *must remain visible* for this bot to continue working. Do not close them or the bot cannot perform actions.
 
 ## Usage (As Attendee)
 

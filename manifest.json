@@ -1,7 +1,7 @@
 {
-  "name": "Hacky The Zoom Bot",
+  "name": "Hacky The Bot for Zoom Meetings",
   "version": "1.0",
-  "description": "Hacky the zoom bot will help you with breakout rooms",
+  "description": "Hacky the Bot will help you with Zoom Meetings Breakout Rooms",
   "permissions": ["activeTab", "declarativeContent"],
   "background": {
     "scripts": ["background.js"],

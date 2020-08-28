@@ -31,4 +31,5 @@ launcher.onclick = function (element) {
             }, 300);
         }
     );
+    launcher.disabled = true;
 }

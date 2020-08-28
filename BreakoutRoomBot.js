@@ -185,3 +185,7 @@ var chatPaneButton = document.querySelector('[aria-label^="open the chat pane"]'
 if (chatPaneButton) {
     chatPaneButton.click();
 }
+
+setTimeout(_ => {
+    chatboxSend(`Hacky the Zoom Chatbot Activated. Attendees, send "!ls" to list rooms and commands.`)
+}, 100)

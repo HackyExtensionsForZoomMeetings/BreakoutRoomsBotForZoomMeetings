@@ -1,10 +1,15 @@
 {
-  "name": "Hacky The Bot for Zoom Meetings",
+  "name": "Breakout Room Bot for Zoom Meetings",
   "version": "1.0",
-  "description": "Hacky the Bot will help you with Zoom Meetings Breakout Rooms",
-  "permissions": ["activeTab", "declarativeContent"],
+  "description": "Breakout Room Bot for Zoom Meetings will help you with Zoom Meetings Breakout Rooms",
+  "permissions": [
+    "activeTab",
+    "declarativeContent"
+  ],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "background.js"
+    ],
     "persistent": false
   },
   "page_action": {
@@ -13,5 +18,8 @@
   "web_accessible_resources": [
     "BreakoutRoomBot.js"
   ],
+  "icons": {
+    "128": "icon.png"
+  },
   "manifest_version": 2
 }

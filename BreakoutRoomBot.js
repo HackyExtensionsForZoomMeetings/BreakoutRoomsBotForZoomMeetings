@@ -187,5 +187,5 @@ if (chatPaneButton) {
 }
 
 setTimeout(_ => {
-    chatboxSend(`Hacky the Zoom Chatbot Activated. Attendees, send "!ls" to list rooms and commands.`)
+    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat  "!ls" to list rooms and commands. Use a "!mv" command to choose a room. Use the End Meeting button in the Breakout Room to return to the main meeting\n\nHost, please rename and dedicate this client for this Bot and dedicate another session to participate as a host in meetings.`)
 }, 100)

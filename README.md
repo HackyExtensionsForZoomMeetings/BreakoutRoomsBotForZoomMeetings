@@ -1,10 +1,6 @@
-# Hacky the Zoom "Bot"
+# Breakout Room Bot for Zoom Meetings Chrome Extension
 
 *Making it possible for **everyone** to walk around to other Breakout Rooms in a Zoom Meeting without the aid of the Host*
-
-## Usage (As Host)
-
-WIP
 
 ## Usage (As Attendee)
 
@@ -13,6 +9,12 @@ WIP
 * `!ls` List Rooms
 * `!mv <room id>` Move to breakout room ID. List of IDs can be found with `!ls`.
 * `!version` Have the bot print out the version.
+
+
+## Usage (As Host)
+
+WIP
+
 
 ## License
 

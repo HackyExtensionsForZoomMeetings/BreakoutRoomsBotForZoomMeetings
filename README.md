@@ -20,6 +20,10 @@
 * `!mv <room id>` Move to breakout room ID. List of IDs can be found with `!ls`.
 * `!version` Have the bot print out the version.
 
+## Developer
+
+* Zip the extension folder and upload it to the Chrome Web Store.
+
 ## License
 
 MIT

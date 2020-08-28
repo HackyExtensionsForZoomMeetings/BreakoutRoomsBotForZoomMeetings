@@ -1,0 +1,26 @@
+{
+  "name": "Breakout Room Bot for Zoom Meetings",
+  "version": "1.0",
+  "description": "Breakout Room Bot for Zoom Meetings will help you with Zoom Meetings Breakout Rooms",
+  "permissions": [
+    "activeTab",
+    "declarativeContent"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    "rxjs.umd.js",
+    "BreakoutRoomBot.js"
+  ],
+  "icons": {
+    "128": "icon.png"
+  },
+  "manifest_version": 2
+}

@@ -16,6 +16,7 @@
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [
+    "rxjs.umd.js",
     "BreakoutRoomBot.js"
   ],
   "icons": {

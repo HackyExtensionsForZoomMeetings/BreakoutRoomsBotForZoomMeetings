@@ -10,11 +10,13 @@ launcher.onclick = function (element) {
     chrome.tabs.query(
         { active: true, currentWindow: true },
         function (tabs) {
+            var rxjsUrl = chrome.runtime.getURL('rxjs.umd.js')
+
             chrome.tabs.executeScript(
                 tabs[0].id,
                 {
                     code: 'var rxjs = document.createElement("script");' +
-                        'rxjs.setAttribute("src","https://unpkg.com/rxjs@6.6.2/bundles/rxjs.umd.min.js");' +
+                        `rxjs.setAttribute("src","${rxjsUrl}");` +
                         'document.head.appendChild(rxjs);'
                 }
             );

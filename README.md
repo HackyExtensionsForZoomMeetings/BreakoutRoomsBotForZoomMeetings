@@ -6,6 +6,7 @@
 
 1. ~~Install the extension from the Chrome Web Store~~ (Not Available yet)
     * For now, clone or download a copy of this repository down and look for instructions online for loading "unpacked extensions" into Chrome or any other Chromium browser. Load the `extension` folder.
+    * If that's troublesome, DM me at @crazysim with your email and I'll add you as a "tester".
 2. Go to the Zoom Meeting.
 3. Ensure the Breakout Rooms are already open
 4. Click the extension button in the menu bar to open the popup

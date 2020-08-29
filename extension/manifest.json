@@ -1,7 +1,7 @@
 {
   "name": "Breakout Room Bot for Zoom Meetings",
   "version": "1.0",
-  "description": "Breakout Room Bot for Zoom Meetings will help you with Zoom Meetings Breakout Rooms",
+  "description": "Allow Attendees to switch their Zoom Meetings Breakout Rooms via Group Chat!",
   "permissions": [
     "activeTab",
     "declarativeContent"

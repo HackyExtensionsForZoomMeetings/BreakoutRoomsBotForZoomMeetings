@@ -187,5 +187,5 @@ if (chatPaneButton) {
 }
 
 setTimeout(_ => {
-    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat  "!ls" to list rooms and commands. Use a "!mv" command to choose a room. Use the End Meeting button in the Breakout Room to return to the main meeting in order to another command to swithc Breakout Rooms.\n\nHost(s), please rename and dedicate this client for the Bot and dedicate another session to participate in the meeting.`)
+    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat  "!ls" to list rooms and commands. Use a "!mv" command to choose a room. Use the End Meeting button in the Breakout Room to return to the main meeting in order to chat another command to switch Breakout Rooms.\n\nHost(s), please rename and dedicate this client for the Bot and dedicate another session to participate in the meeting.`)
 }, 100)

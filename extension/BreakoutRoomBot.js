@@ -126,7 +126,7 @@ var moveRequestObservable = rxjs.zip(moveRequestMessages, moveRequestDelayer).pi
     rxjs.operators.withLatestFrom(
         storeObservable,
         ({ sender, roomIdStr }, storeState) => {
-            const genericHelpMessage = "❓ Chat \"!ls\" to list rooms and other commands."
+            const genericHelpMessage = "❓ You may need to press the Breakout Rooms button to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands."
 
             if (!/^\d+$/.test(roomIdStr)) {
                 return `⚠️ @${sender} Room ID must be an integer.\n` + genericHelpMessage
@@ -187,5 +187,5 @@ if (chatPaneButton) {
 }
 
 setTimeout(_ => {
-    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat  "!ls" to list rooms and commands. Use a "!mv" command to choose a room. Use the End Meeting button in the Breakout Room to return to the main meeting in order to another command to swithc Breakout Rooms.\n\nHost(s), please rename and dedicate this client for the Bot and dedicate another session to participate as a Host or Co-Host in meetings.`)
+    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat  "!ls" to list rooms and commands. Use a "!mv" command to choose a room. Use the End Meeting button in the Breakout Room to return to the main meeting in order to another command to swithc Breakout Rooms.\n\nHost(s), please rename and dedicate this client for the Bot and dedicate another session to participate in the meeting.`)
 }, 100)

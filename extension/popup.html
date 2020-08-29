@@ -21,8 +21,11 @@
 </head>
 
 <body style="width:500px; height:450px">
-  <img src="icon.png" style="width:30px; float: left;" alt=""> <h1>Breakout Room Bot for Zoom Meetings</h1>
+  <img src="icon.png" style="width:30px; float: left;" alt="">
+  <h1>Breakout Room Bot for Zoom Meetings</h1>
   <h2>Allows Attendees to switch their Breakout Rooms via Group Chat.</h2>
+  <hr>
+  Bot only runs on Zoom Meetings Web Client ("Join from Browser"). Attendees can run whatever client they like!
   <hr>
   <p>
     If you would like to modify or change the logic for this bot for your own needs, please check out the <a
@@ -34,9 +37,11 @@
     Please read the <a href="https://github.com/nelsonjchen/HackyZoomBreakoutBot">README</a> for usage instructions.
   </p>
   <hr>
-  ⚠️ The Host session in the web browser will need to be dedicated to the meeting with this bot to manage Breakout Rooms! Audio
-  participation in bot-hosting session not required. Join
-  with another client on the system to actually participate.
+  ⚠️ The Host Zoom Meetings web client in the web browser will need to be dedicated to the meeting with this bot to
+  manage Breakout
+  Rooms! Audio participation in bot-hosting session not required. Do not join breakout rooms with this client! Hosts,
+  join
+  with another Zoom Meetings client on your system to actually participate in the meeting and join breakout rooms.
   <hr>
   <img src="inProgress.png" alt="In Progress" style="width: 120px; float:left; padding: 10px">
   <p>
@@ -51,7 +56,8 @@
   <button id="launcher">Attach and Launch Breakout Room Bot</button>
   <script src="popup.js"></script>
   <p>To remove or deactivate the bot, refresh or close the meeting page.</p>
-  <p><b>KNOWN ISSUE: Do not send bot commands from attached host meeting! Have an attendee send a <code>!ls</code> command to test.</b></p>
+  <p><b>KNOWN ISSUE: Do not send bot commands from attached host meeting! Have an attendee send a <code>!ls</code>
+      command to test.</b></p>
 </body>
 
 </html>

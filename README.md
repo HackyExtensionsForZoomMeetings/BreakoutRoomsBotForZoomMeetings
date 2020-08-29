@@ -6,7 +6,7 @@
 
 1. Install the extension from the Chrome Web Store @ https://chrome.google.com/webstore/detail/breakout-room-bot-for-zoo/acfkhlojnkihdmgikmkilfjkapkemcnd?hl=en&authuser=0
     * Alternatively, clone or download a copy of this repository down and look for instructions online for loading "unpacked extensions" into Chrome or any other Chromium browser. Load the `extension` folder.
-2. Go to the Zoom Meeting.
+2. Go to the Zoom Meeting as the Host in a "Join from Browser" Zoom Meetings Web Client.
 3. Ensure the Breakout Rooms are already open
 4. Click the extension button in the menu bar to open the popup
     ![](launch.png)

@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(function() {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([{
       conditions: [new chrome.declarativeContent.PageStateMatcher({
-        pageUrl: {hostEquals: 'zoom.us'},
+        pageUrl: {hostSuffix: 'zoom.us'},
       })],
        actions: [new chrome.declarativeContent.ShowPageAction()]
     }]);

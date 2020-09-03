@@ -125,8 +125,12 @@ var nameChangeObservable = storeObservable.pipe(
         var changedNames = [];
 
         for (let [guid, displayName] of attendeesMap.entries()) {
-            if (acc.previousMap.get(guid) != displayName) {
-                changedNames.push(displayName);
+            let oldDisplayName = acc.previousMap.get(guid);
+            if (oldDisplayName != undefined && oldDisplayName != displayName) {
+                changedNames.push({
+                    oldDisplayName: oldDisplayName,
+                    newDisplayName: displayName,
+                });
             }
         }
 

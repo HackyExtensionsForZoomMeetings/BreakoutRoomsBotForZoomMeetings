@@ -109,6 +109,34 @@ var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
     ),
 )
 
+var nameChangeObservable = storeObservable.pipe(
+    rxjs.operators.map(s => s.attendeesList.attendeesList),
+    rxjs.operators.map(list => new Map(
+            list.map(
+                attendee => [attendee.userGUID, attendee.displayName]
+            )
+        )
+    ),
+    rxjs.operators.scan((acc, attendeesMap) => {
+        if (acc === undefined) {
+            return { previousMap: attendeesMap, changedNames: [] }
+        }
+
+        var changedNames = [];
+
+        for (let [guid, displayName] of attendeesMap.entries()) {
+            if (acc.previousMap.get(guid) != displayName) {
+                changedNames.push(displayName);
+            }
+        }
+
+        return { previousMap: attendeesMap, changedNames: changedNames }
+    }, undefined),
+    rxjs.operators.map((acc) => acc.changedNames),
+    rxjs.operators.distinctUntilChanged(),
+    rxjs.operators.filter((changedNames) => changedNames.length > 0)
+)
+
 var moveRequestDelayer = rxjs.interval(300);
 
 var moveRequestMessages = userMessageMapObservable.pipe(
@@ -164,6 +192,8 @@ var moveRequestObservable = rxjs.zip(moveRequestMessages, moveRequestDelayer).pi
         }
     ),
 )
+
+
 
 // SUBSCRIPTIONS
 

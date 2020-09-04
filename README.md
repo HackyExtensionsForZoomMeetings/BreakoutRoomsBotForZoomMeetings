@@ -2,6 +2,8 @@
 
 *Making it possible for **everyone** to walk around to other Breakout Rooms in a Zoom Meeting without the aid of the Host*
 
+TODO: Video
+
 ## Usage (As Host)
 
 1. Install the extension from the Chrome Web Store @ https://chrome.google.com/webstore/detail/breakout-room-bot-for-zoo/acfkhlojnkihdmgikmkilfjkapkemcnd?hl=en&authuser=0

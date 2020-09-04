@@ -142,6 +142,33 @@ var nameChangeObservable = storeObservable.pipe(
     rxjs.operators.flatMap((changedNames) => rxjs.from(changedNames)),
 )
 
+var moveRequestFromNameChangeMessages = nameChangeObservable.pipe(
+    // Only operate on names that change to a format requesting a room
+    rxjs.operators.filter((changedNamePair) => {
+        var regex = /\[[Rr]oom(\d+)\]/;
+        return regex.test(changedNamePair.newDisplayName);
+    }),
+    // Ignore names that change but match the old name's id
+    rxjs.operators.filter((changedNamePair) => {
+        const regex = /\[[Rr]oom(\d+)\]/;
+        var newNameTest = regex.test(changedNamePair.newDisplayName);
+        var oldNameTest = regex.test(changedNamePair.oldDisplayName);
+        if (newNameTest && oldNameTest) {
+            var targetRoomNew = changedNamePair.newDisplayName.match(regex)[1]
+            var targetRoomOld = changedNamePair.oldDisplayName.match(regex)[1]
+            if (targetRoomNew == targetRoomOld) {
+                return false;
+            }
+        }
+        return true
+    }),
+    rxjs.operators.map((changedNamePair) => {
+        const regex = /\[[Rr]oom(\d+)\]/;
+        var targetRoomNew = changedNamePair.newDisplayName.match(regex)[1]
+        return { sender: changedNamePair.newDisplayName, message: `!mv ${targetRoomNew}`}
+    }),
+)
+
 var moveRequestDelayer = rxjs.interval(300);
 
 var moveRequestMessages = userMessageMapObservable.pipe(

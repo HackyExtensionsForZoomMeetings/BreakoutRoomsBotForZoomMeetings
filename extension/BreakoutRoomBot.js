@@ -138,7 +138,8 @@ var nameChangeObservable = storeObservable.pipe(
     }, undefined),
     rxjs.operators.map((acc) => acc.changedNames),
     rxjs.operators.distinctUntilChanged(),
-    rxjs.operators.filter((changedNames) => changedNames.length > 0)
+    rxjs.operators.filter((changedNames) => changedNames.length > 0),
+    rxjs.operators.flatMap((changedNames) => rxjs.from(changedNames)),
 )
 
 var moveRequestDelayer = rxjs.interval(300);

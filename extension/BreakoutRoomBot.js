@@ -171,8 +171,13 @@ var moveRequestFromNameChangeMessages = nameChangeObservable.pipe(
 
 var moveRequestDelayer = rxjs.interval(300);
 
-var moveRequestMessages = userMessageMapObservable.pipe(
+var chatMoveRequestMessages = userMessageMapObservable.pipe(
     rxjs.operators.filter(({ _, message }) => message.startsWith("!mv ")),
+)
+
+var moveRequestMessages = rxjs.merge(
+    chatMoveRequestMessages,
+    moveRequestFromNameChangeMessages,
 )
 
 var moveRequestObservable = rxjs.zip(moveRequestMessages, moveRequestDelayer).pipe(

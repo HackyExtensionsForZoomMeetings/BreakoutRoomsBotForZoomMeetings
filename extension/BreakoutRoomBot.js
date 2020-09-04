@@ -46,6 +46,9 @@ function reactMouseOver(el) {
 
 function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
     var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName},Not Joined"]`);
+    if (attendeeEl == null) {
+        var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName}"]`);
+    }
     reactMouseOver(attendeeEl);
     var clickMoveToButtonInterval = setInterval(function () {
         if (document.querySelector('.bo-room-item-attendee__tools')) {

@@ -20,6 +20,7 @@ TODO: Video Showcase/Tutorial/Demo
 
 * `!ls` List Rooms
 * `!mv <room id>` Move to breakout room ID. List of IDs can be found with `!ls`.
+    * An alternate interface is to rename yourself and append a `[Room<id>]` or change the `[Room<id>]` suffix of your name. Unlike Chat commands, this *also works inside Breakout rooms*!
 * `!version` Have the bot print out the version.
 
 ## Developer

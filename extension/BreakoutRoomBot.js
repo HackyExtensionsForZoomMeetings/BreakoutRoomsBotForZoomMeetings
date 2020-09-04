@@ -1,4 +1,4 @@
-BREAKOUT_ROOM_BOT_VERSION = "2020.08.1"
+BREAKOUT_ROOM_BOT_VERSION = "2020.09.2"
 
 // HELPER FUNCTIONS
 
@@ -105,7 +105,7 @@ var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
         "📜 Breakout Room List\n" +
         "Chat \"!ls\" to see this list\n" +
         state.breakoutRoom.roomList.map(
-            (room, index) => `Chat "!mv ${index + 1}" into Group Chat to be assigned to Breakout Room "${room.name}"`
+            (room, index) => `❇️ Chat "!mv ${index + 1}" into Group Chat \n in the main session or \n append "[Room${index + 1}]" to your name \n to be assigned to Breakout Room "${room.name}"`
         ).join('\n') +
         "\n" +
         "End of List"
@@ -257,5 +257,5 @@ if (chatPaneButton) {
 }
 
 setTimeout(_ => {
-    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat  "!ls" to list rooms and commands. Use a "!mv" command to choose a room. Use the End Meeting button in the Breakout Room to return to the main meeting in order to chat another command to switch Breakout Rooms.\n\nHost(s), please rename and dedicate this client for the Bot and use another session to participate in the meeting.`)
+    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat "!ls" in main meeting chat to list rooms and commands.\n Use a "!mv" in main meeting chat or append a [Room<room id>] in to your name to choose a room.\n Chat commands only work in main meeting however renames are detected in main meeting or breakout rooms. \n Use the End Meeting button in the Breakout Room to return to the main meeting in order to use chat commands\n\nHost(s), please rename and dedicate this client for the Bot and use another session to participate in the meeting.`)
 }, 100)

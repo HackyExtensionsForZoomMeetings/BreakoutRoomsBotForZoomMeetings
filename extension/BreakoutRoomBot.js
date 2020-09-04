@@ -1,4 +1,4 @@
-BREAKOUT_ROOM_BOT_VERSION = "2020.08.1"
+BREAKOUT_ROOM_BOT_VERSION = "2020.09.2"
 
 // HELPER FUNCTIONS
 
@@ -46,6 +46,9 @@ function reactMouseOver(el) {
 
 function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
     var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName},Not Joined"]`);
+    if (attendeeEl == null) {
+        var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName}"]`);
+    }
     reactMouseOver(attendeeEl);
     var clickMoveToButtonInterval = setInterval(function () {
         if (document.querySelector('.bo-room-item-attendee__tools')) {
@@ -102,17 +105,82 @@ var breakoutRoomListReplyObservable = userMessageMapObservable.pipe(
         "📜 Breakout Room List\n" +
         "Chat \"!ls\" to see this list\n" +
         state.breakoutRoom.roomList.map(
-            (room, index) => `Chat "!mv ${index + 1}" into Group Chat to be assigned to Breakout Room "${room.name}"`
+            (room, index) => `❇️ Chat "!mv ${index + 1}" into Group Chat \n in the main session or \n append "[Room${index + 1}]" to your name \n to be assigned to Breakout Room "${room.name}"`
         ).join('\n') +
         "\n" +
         "End of List"
     ),
 )
 
+var nameChangeObservable = storeObservable.pipe(
+    rxjs.operators.map(s => s.attendeesList.attendeesList),
+    rxjs.operators.map(list => new Map(
+            list.map(
+                attendee => [attendee.userGUID, attendee.displayName]
+            )
+        )
+    ),
+    rxjs.operators.scan((acc, attendeesMap) => {
+        if (acc === undefined) {
+            return { previousMap: attendeesMap, changedNames: [] }
+        }
+
+        var changedNames = [];
+
+        for (let [guid, displayName] of attendeesMap.entries()) {
+            let oldDisplayName = acc.previousMap.get(guid);
+            if (oldDisplayName != undefined && oldDisplayName != displayName) {
+                changedNames.push({
+                    oldDisplayName: oldDisplayName,
+                    newDisplayName: displayName,
+                });
+            }
+        }
+
+        return { previousMap: attendeesMap, changedNames: changedNames }
+    }, undefined),
+    rxjs.operators.map((acc) => acc.changedNames),
+    rxjs.operators.distinctUntilChanged(),
+    rxjs.operators.filter((changedNames) => changedNames.length > 0),
+    rxjs.operators.flatMap((changedNames) => rxjs.from(changedNames)),
+)
+
+var moveRequestFromNameChangeMessages = nameChangeObservable.pipe(
+    // Only operate on names that change to a format requesting a room
+    rxjs.operators.filter((changedNamePair) => {
+        var regex = /\[[Rr]oom(\d+)\]/;
+        return regex.test(changedNamePair.newDisplayName);
+    }),
+    // Ignore names that change but match the old name's id
+    rxjs.operators.filter((changedNamePair) => {
+        const regex = /\[[Rr]oom(\d+)\]/;
+        var newNameTest = regex.test(changedNamePair.newDisplayName);
+        var oldNameTest = regex.test(changedNamePair.oldDisplayName);
+        if (newNameTest && oldNameTest) {
+            var targetRoomNew = changedNamePair.newDisplayName.match(regex)[1]
+            var targetRoomOld = changedNamePair.oldDisplayName.match(regex)[1]
+            if (targetRoomNew == targetRoomOld) {
+                return false;
+            }
+        }
+        return true
+    }),
+    rxjs.operators.map((changedNamePair) => {
+        const regex = /\[[Rr]oom(\d+)\]/;
+        var targetRoomNew = changedNamePair.newDisplayName.match(regex)[1]
+        return { sender: changedNamePair.newDisplayName, message: `!mv ${targetRoomNew}`}
+    }),
+)
+
 var moveRequestDelayer = rxjs.interval(300);
 
-var moveRequestMessages = userMessageMapObservable.pipe(
+var chatMoveRequestMessages = userMessageMapObservable.pipe(
     rxjs.operators.filter(({ _, message }) => message.startsWith("!mv ")),
+)
+
+var moveRequestMessages = rxjs.merge(
+    chatMoveRequestMessages,
+    moveRequestFromNameChangeMessages,
 )
 
 var moveRequestObservable = rxjs.zip(moveRequestMessages, moveRequestDelayer).pipe(
@@ -165,6 +233,8 @@ var moveRequestObservable = rxjs.zip(moveRequestMessages, moveRequestDelayer).pi
     ),
 )
 
+
+
 // SUBSCRIPTIONS
 
 var versionReplySubscription = versionReplyObservable.subscribe(
@@ -187,5 +257,5 @@ if (chatPaneButton) {
 }
 
 setTimeout(_ => {
-    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat  "!ls" to list rooms and commands. Use a "!mv" command to choose a room. Use the End Meeting button in the Breakout Room to return to the main meeting in order to chat another command to switch Breakout Rooms.\n\nHost(s), please rename and dedicate this client for the Bot and use another session to participate in the meeting.`)
+    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat "!ls" in main meeting chat to list rooms and commands.\n Use a "!mv" in main meeting chat or append a [Room<room id>] in to your name to choose a room.\n Chat commands only work in main meeting however renames are detected in main meeting or breakout rooms. \n Use the End Meeting button in the Breakout Room to return to the main meeting in order to use chat commands\n\nHost(s), please rename and dedicate this client for the Bot and use another session to participate in the meeting.`)
 }, 100)

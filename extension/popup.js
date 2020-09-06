@@ -11,7 +11,6 @@ launcher.onclick = function (element) {
         { active: true, currentWindow: true },
         function (tabs) {
             var rxjsUrl = chrome.runtime.getURL('rxjs.umd.js')
-
             chrome.tabs.executeScript(
                 tabs[0].id,
                 {
@@ -20,6 +19,17 @@ launcher.onclick = function (element) {
                         'document.head.appendChild(rxjs);'
                 }
             );
+
+            var fuzzySortUrl = chrome.runtime.getURL('fuzzysort.js')
+            chrome.tabs.executeScript(
+                tabs[0].id,
+                {
+                    code: 'var rxjs = document.createElement("script");' +
+                        `rxjs.setAttribute("src","${fuzzySortUrl}");` +
+                        'document.head.appendChild(rxjs);'
+                }
+            );
+
             var url = chrome.runtime.getURL('BreakoutRoomBot.js')
             setTimeout(_ => {
                 chrome.tabs.executeScript(

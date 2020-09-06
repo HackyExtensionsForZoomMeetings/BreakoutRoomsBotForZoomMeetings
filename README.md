@@ -35,6 +35,8 @@ MIT
 
 This is likely cobbled together from piles of stackoverflow, random Google Searches, and contributors.
 
+This hack/bot uses RxJS and Fuzzysort.
+
 [breakoutroominfo]: https://support.zoom.us/hc/en-us/articles/206476093-Enabling-breakout-rooms
 [ocrbreakoutroombot]: https://github.com/ottoscholten/zoomChatBot
 [desertpyhack]: https://www.meetup.com/Phoenix-Python-Meetup-Group/events/272227324/

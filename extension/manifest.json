@@ -16,6 +16,7 @@
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [
+    "fuzzysort.js",
     "rxjs.umd.js",
     "BreakoutRoomBot.js"
   ],

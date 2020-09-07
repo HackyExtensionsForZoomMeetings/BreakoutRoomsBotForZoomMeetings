@@ -155,12 +155,12 @@ var nameChange$ = store$.pipe(
 var moveRequestQueryFromNameChange$ = nameChange$.pipe(
     // Only operate on names that change to a format requesting a room
     rxjs.operators.filter((changedNamePair) => {
-        const regex = /\[[(.+)]\]/;
+        const regex = /\[(.+)\]/;
         return regex.test(changedNamePair.newDisplayName);
     }),
     // Ignore names that change but match the old name's query
     rxjs.operators.filter((changedNamePair) => {
-        const regex = /\[[(.+)]\]/;
+        const regex = /\[(.+)\]/;
         var newNameTest = regex.test(changedNamePair.newDisplayName);
         var oldNameTest = regex.test(changedNamePair.oldDisplayName);
         if (newNameTest && oldNameTest) {
@@ -173,7 +173,7 @@ var moveRequestQueryFromNameChange$ = nameChange$.pipe(
         return true
     }),
     rxjs.operators.map((changedNamePair) => {
-        const regex = /\[[(.+)]\]/;
+        const regex = /\[(.+)\]/;
         var targetRoomQuery = changedNamePair.newDisplayName.match(regex)[1]
         return { sender: changedNamePair.newDisplayName, targetRoomQuery: targetRoomQuery, src: 'nameChange' }
     }),
@@ -300,7 +300,6 @@ var errorPrintSubscription = moveRequestError$.subscribe(
         chatboxSend(error);
     }
 )
-
 
 var moveRequestFulfillNotifySubscription = moveRequestChecked$.subscribe(
     ({ sender, roomName, src }) => {

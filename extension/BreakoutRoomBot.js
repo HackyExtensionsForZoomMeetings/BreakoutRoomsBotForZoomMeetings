@@ -207,7 +207,7 @@ var moveRequestSimpleIdQueryResolved$ = moveRequestSimpleIdQuery$.pipe(
             var roomIndex = parseInt(targetRoomQuery, 10);
 
             if (roomIndex == 0 || roomIndex > storeState.breakoutRoom.roomList.length) {
-                return { error: `⚠️ (from ${src}) @${sender} Room ID "${targetRoomQuery}" out of range!\n` }
+                return { error: `⚠️ (from ${src})\n @${sender} Room ID "${targetRoomQuery}" out of range!\n` }
             }
 
             var roomName = storeState.breakoutRoom.roomList[roomIndex - 1].name;
@@ -224,7 +224,7 @@ var moveRequestStringQueryResolved$ = moveRequestStringQuery$.pipe(
             var roomNames = storeState.breakoutRoom.roomList.map(room => room.name);
             var results = fuzzysort.go(targetRoomQuery, roomNames);
             if (results.length == 0) {
-                return { error: `⚠️ (from ${src}) @${sender} No names matched for query: ${targetRoomQuery}!\n` }
+                return { error: `⚠️ (from ${src})\n @${sender} No names matched for query: ${targetRoomQuery}!\n` }
             }
             var roomName = results[0].target;
 
@@ -258,11 +258,11 @@ var moveRequestChecked$ = moveRequestResolved$.pipe(
 
 
             if (roomAttendeesByName.includes(sender)) {
-                return { error: `⚠️ (from ${src}) Requester "${sender}" already in "${room.name}"\n` }
+                return { error: `⚠️ (from ${src})\n "${sender}" already in "${room.name}"\n` }
             }
 
             if (Array.from(guidSenderMap.values()).filter(x => x == sender).length > 1) {
-                return { error: `⚠️ (from ${src}) "${sender}" must have a unique name in the meeting for this bot to operate. "${sender}"s, please rename to unique names.\n` }
+                return { error: `⚠️ (from ${src})\n "${sender}" must have a unique name in the meeting for this bot to operate. "${sender}"s, please rename to unique names.\n` }
             }
 
             return { sender, roomName, src }
@@ -307,8 +307,8 @@ var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscrib
             return;
         }
         assignedUnjoinedUserToBreakoutRoom(sender, roomName);
-        chatboxSend(`🎯 (from ${src}) Assigning "${sender}" to "${roomName}"\n`)
-        chatboxSend("❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.");
+        chatboxSend(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n`)
+        chatboxSend("❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n");
     }
 )
 

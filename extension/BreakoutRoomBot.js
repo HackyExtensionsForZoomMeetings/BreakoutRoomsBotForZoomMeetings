@@ -285,6 +285,11 @@ var moveRequestError$ = rxjs.merge(
     moveRequestInvalidError$,
 )
 
+var moveRequestErrorsAndSuccess$ = rxjs.merge(
+    moveRequestError$,
+    moveRequestValidTimeSliceQueue$
+)
+
 // SUBSCRIPTIONS
 
 var versionReplySubscription = versionReply$.subscribe(
@@ -295,14 +300,12 @@ var breakoutRoomListReplySubscription = breakoutRoomListReply$.subscribe(
     (message) => chatboxSend(message)
 )
 
-var errorPrintSubscription = moveRequestError$.subscribe(
-    ({ error }) => {
-        chatboxSend(error);
-    }
-)
-
-var moveRequestFulfillNotifySubscription = moveRequestChecked$.subscribe(
-    ({ sender, roomName, src }) => {
+var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscribe(
+    ({ sender, roomName, src, error }) => {
+        if (error) {
+            chatboxSend(error);
+            return;
+        }
         assignedUnjoinedUserToBreakoutRoom(sender, roomName);
         chatboxSend(`🎯 (from ${src}) Assigning "${sender}" to "${roomName}"\n`)
         chatboxSend("❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.");

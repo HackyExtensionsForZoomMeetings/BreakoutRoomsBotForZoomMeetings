@@ -2,6 +2,8 @@
 
 *Making it possible for **everyone** to walk around to other Breakout Rooms in a Zoom Meeting without the aid of the Host*
 
+Discord: https://discord.gg/NS6nbrT
+
 TODO: Video Showcase/Tutorial/Demo
 
 ## Usage (As Host)

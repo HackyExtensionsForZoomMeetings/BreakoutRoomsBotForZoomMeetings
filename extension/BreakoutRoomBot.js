@@ -44,24 +44,37 @@ function reactMouseOver(el) {
     el.dispatchEvent(oEvent);
 }
 
-function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
+async function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
     var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName},Not Joined"]`);
     if (attendeeEl == null) {
         var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName}"]`);
     }
     reactMouseOver(attendeeEl);
-    var clickMoveToButtonInterval = setInterval(function () {
-        if (document.querySelector('.bo-room-item-attendee__tools')) {
-            document.querySelector('.bo-room-item-attendee__tools > button').click()
-            var selectRoomClickInterval = setInterval(function () {
-                if (document.querySelector(`.zmu-data-selector-item[aria-label^="${roomName},"]`)) {
-                    document.querySelector(`.zmu-data-selector-item[aria-label^="${roomName},"]`).click()
-                    clearInterval(selectRoomClickInterval);
-                }
-            }, 100);
-            clearInterval(clickMoveToButtonInterval);
+    var moveToButtonEl = await waitForElm('.bo-room-item-attendee__tools > button');
+    moveToButtonEl.click();
+    var selectRoomEl = await waitForElm(`.zmu-data-selector-item[aria-label^="${roomName},"]`);
+    selectRoomEl.click();
+}
+
+// https://stackoverflow.com/a/61511955/286021
+function waitForElm(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
         }
-    }, 100);
+
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
 }
 
 // OBSERVABLES

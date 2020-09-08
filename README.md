@@ -60,15 +60,12 @@ This is a hack, there may be some limits. This bot was written for meetings of a
 
 One breakout room assignment can be performed every 300ms for reliability reasons. If you are able to pre-assign users to a correct breakout room with the [pre-assign users to breakout room functionality][preassign], I suggest you do so. If the assignment throttle is hit, assignments are queued and will eventually complete.
 
-300ms was just a reasonable low value. There is another throttling value as well. They can be lowered by editing the source code around these location:
+300ms was just a reasonable low value. They can be lowered by editing the source code around these location:
 
 * The 300ms throttling queue for requests
     * https://github.com/nelsonjchen/BreakoutRoomsBotForZoomMeetings/blob/f760f5fbb83f082a8ea7743ac23808874ad9be72/extension/BreakoutRoomBot.js#L277
-* The wait time for the room selector after clicking the user in the breakout room
-    * https://github.com/nelsonjchen/BreakoutRoomsBotForZoomMeetings/blob/f760f5fbb83f082a8ea7743ac23808874ad9be72/extension/BreakoutRoomBot.js#L61
-    * This value must be lower than the 300ms value (or your lowered 300ms throttle queue value) above.
 
-This is a definitely a your mileage will vary modification. If you do so, I suggest using a good PC and an Ethernet connection to host the bot.
+This is a definitely a *your mileage will vary* modification. If you do so, I suggest using a good (gaming!) PC and a wired connection to host the bot.
 
 The meeting state is read from the internal store and is very reliable. However, controlling the meeting and performing actions is intentionally rate limited and throttled as it simulates clicks
 and selections upon the meeting's HTML page and this is inherently rate-limited and possibly buggy.

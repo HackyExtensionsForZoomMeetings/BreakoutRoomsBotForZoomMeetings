@@ -287,7 +287,7 @@ var [moveRequestInvalidError$, moveRequestValid$] = moveRequestChecked$.pipe(
     rxjs.operators.partition(({ error }) => error),
 )
 
-var moveRequestValidTimeSlice$ = rxjs.interval(300);
+var moveRequestValidTimeSlice$ = rxjs.interval(150);
 
 var moveRequestValidTimeSliceQueue$ = rxjs.zip(moveRequestValid$, moveRequestValidTimeSlice$).pipe(
     rxjs.operators.map(([s, _d]) => s)

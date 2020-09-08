@@ -1,3 +1,7 @@
+# 2020.09.5 2020-09-07
+
+* Lower safety latency for assignments to 150ms by removing some "sleeps".
+
 # 2020.09.4 2020-09-07
 
 * Tweak newlines in chat responses

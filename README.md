@@ -58,11 +58,11 @@ If you're in a breakout room, you can return to the main or root Zoom meeting fr
 
 This is a hack, there may be some limits. This bot was written for meetings of about 30 or 40 people but may work for much larger.
 
-One breakout room assignment can be performed every 300ms for reliability reasons. If you are able to pre-assign users to a correct breakout room with the [pre-assign users to breakout room functionality][preassign], I suggest you do so. If the assignment throttle is hit, assignments are queued and will eventually complete.
+One breakout room assignment can be performed every 150ms for reliability reasons. If you are able to pre-assign users to a correct breakout room with the [pre-assign users to breakout room functionality][preassign], I suggest you do so. If the assignment throttle is hit, assignments are queued and will eventually complete.
 
-300ms was just a reasonable low value. They can be lowered by editing the source code around these location:
+150ms was just a reasonable low value. They can be lowered by editing the source code around these location:
 
-* The 300ms throttling queue for requests
+* The throttling queue for requests
     * https://github.com/nelsonjchen/BreakoutRoomsBotForZoomMeetings/blob/f760f5fbb83f082a8ea7743ac23808874ad9be72/extension/BreakoutRoomBot.js#L277
 
 This is a definitely a *your mileage will vary* modification. If you do so, I suggest using a good (gaming!) PC and a wired connection to host the bot.

@@ -4,7 +4,9 @@
 
 Discord for help, comments, discussion, etc. : https://discord.gg/NS6nbrT
 
-TODO: Video Showcase/Tutorial/Demo
+TODO: Video Showcase/Tutorial/Demo. Sample below; not final.
+
+![](https://user-images.githubusercontent.com/5363/92406673-79d2e080-f0ed-11ea-9953-5b7704811d1c.gif)
 
 ## Usage (As Host)
 

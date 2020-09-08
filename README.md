@@ -6,6 +6,8 @@ Discord for help, comments, discussion, etc. : https://discord.gg/NS6nbrT
 
 TODO: Video Showcase/Tutorial/Demo. Sample below; not final.
 
+Example Screen Share in main meeting:
+![](intro.png)
 ![](https://user-images.githubusercontent.com/5363/92406673-79d2e080-f0ed-11ea-9953-5b7704811d1c.gif)
 
 ## Usage (As Host)
@@ -14,7 +16,7 @@ TODO: Video Showcase/Tutorial/Demo. Sample below; not final.
     * Alternatively, clone or download a copy of this repository down and look for instructions online for loading "unpacked extensions" into Chrome or any other Chromium browser. Load the `extension` folder.
 2. Go to the Zoom Meeting as the Host in a "Join from Browser" Zoom Meetings Web Client.
     * Button to launch extension only works on `*.zoom.us` domains.
-3. Ensure the Breakout Rooms are already open
+3. Ensure the Breakout Rooms are already open and have started.
 4. Click the extension button in the menu bar to open the popup
     ![](launch.png)
 5. Click the button to "Attach and Launch Breakout Room Bot"
@@ -26,6 +28,7 @@ TODO: Video Showcase/Tutorial/Demo. Sample below; not final.
 If you're in a breakout room, you can return to the main or root Zoom meeting from a Breakout room by selecting End Meeting in a Breakout Room and selecting Leave Breakout room.
 
 * `!ls` List Rooms
+    * Alternatively, the Host can share screen a slide or image with a list of room names.
 * Switching Rooms as a non-host or non-cohost (this is whole reason for this bot's existence)
     * Two methods
         * *`!mv <room id|room name query>`*
@@ -62,7 +65,7 @@ This is a hack, there may be some limits. This bot was written for meetings of a
 
 One breakout room assignment can be performed every 150ms for reliability reasons. If you are able to pre-assign users to a correct breakout room with the [pre-assign users to breakout room functionality][preassign], I suggest you do so. If the assignment throttle is hit, assignments are queued and will eventually complete.
 
-150ms was just a reasonable low value. They can be lowered by editing the source code around these location:
+150ms was just a reasonable low value. No experimentation was done to arrive at it. It can be lowered by editing the source code around these location:
 
 * The throttling queue for requests
     * https://github.com/nelsonjchen/BreakoutRoomsBotForZoomMeetings/blob/f760f5fbb83f082a8ea7743ac23808874ad9be72/extension/BreakoutRoomBot.js#L277

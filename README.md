@@ -12,14 +12,26 @@ Example Screen Share in main meeting:
 
 ## Usage (As Host)
 
+It is strongly recommend you do a dry run with some associates first!
+
 1. Install the extension from the Chrome Web Store @ https://chrome.google.com/webstore/detail/breakout-room-bot-for-zoo/acfkhlojnkihdmgikmkilfjkapkemcnd?hl=en&authuser=0
-    * Alternatively, clone or download a copy of this repository down and look for instructions online for loading "unpacked extensions" into Chrome or any other Chromium browser. Load the `extension` folder.
+    * Alternatively, clone or download a copy of this repository and look for instructions online for loading "unpacked extensions" into Chrome or any other Chromium browser. Load the `extension` folder.
 2. Go to the Zoom Meeting as the Host in a "Join from Browser" Zoom Meetings Web Client.
     * Button to launch extension only works on `*.zoom.us` domains.
 3. Ensure the Breakout Rooms are already open and have started.
 4. Click the extension button in the menu bar to open the popup
     ![](launch.png)
 5. Click the button to "Attach and Launch Breakout Room Bot"
+
+After:
+
+* Do not close the Breakout Rooms and Chat Window while the bot is in operation.
+* Unless you like cacophony, do not join audio in this client. You can leave audio by clicking the "^" next to the microphone icon and selecting "Leave `<Something>` Audio".
+* Use another Zoom client on the system to actually participate in the meeting. You can safely make this other client a Co-Host if it isn't already from the attached bot-controlled web client UI.
+
+### Notes for Co-Hosts
+
+* With plain Zoom, you cannot assign users to breakout rooms. You can move around freely between Breakout Rooms without the bot though. Co-Hosts can also rename users. This means you can also rename users to have the bot assign them to Breakout Rooms!
 
 ## Usage (As Attendee)
 
@@ -31,14 +43,14 @@ If you're in a breakout room, you can return to the main or root Zoom meeting fr
     * Alternatively, the Host can share screen a slide or image with a list of room names.
 * Switching Rooms as a non-host or non-cohost (this is whole reason for this bot's existence)
     * Two methods
-        * *`!mv <room id|room name query>`*
-            * Move to breakout room ID or a room name that best matches the query. List of room IDs and names of Breakout Rooms can be found with `!ls`.
-        * *Rename yourself and append/change a `[<room id|room name query>]` to your name.*
+        * *`!mv <room id>`* or *`!mv <room name>`*
+            * Move to breakout room ID or a room name that best matches. List of room IDs and names of Breakout Rooms can be found with `!ls`. The host may have also screen shared a screen with the list.
+        * *Rename yourself and append/change a `[room id]` or `[room name]` to your name.*
             * Unlike chat commands, this action *also works inside Breakout rooms and not just the main meeting*!
-            * For example, if your name is "Bryan", change your name to "`Bryan [1]`" to move to the room with the ID "`1`".
-            * For example, if your name is "Bryan", change your name to "`Bryan [Foo]`" to move to the room whose name best matches "Foo".
-    * Both the `!mv` command and the name change action can take a *room name query*.
-      The best matching room name of the query is the room the requester will be sent to. **This is a fuzzy search.**
+            * For example, if your name is "Bryan", change your name to "`Bryan [1]`" to move to the room with the ID of "`1`".
+            * Another example, if your name is "Bryan", change your name to "`Bryan [Foo]`" to move to the room whose name best matches "Foo".
+    * Both the `!mv` command and the name change action can take a *room name*.
+      The best matching room name is the room the requester will be sent to. **This is a fuzzy search.**
 
       Breakout rooms are by default named `Breakout Room <some number>` but they can be renamed before the breakout rooms are opened or while the rooms are temporaily closed.
         * Example

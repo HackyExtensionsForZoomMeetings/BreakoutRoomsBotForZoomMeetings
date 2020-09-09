@@ -1,3 +1,7 @@
+# 2020.09.6 2020-09-08
+
+* Upon attachment, assign users by their names
+
 # 2020.09.5 2020-09-07
 
 * Lower safety latency for assignments to 150ms by removing some "sleeps".

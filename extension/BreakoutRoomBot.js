@@ -45,15 +45,21 @@ function reactMouseOver(el) {
 }
 
 async function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
+    console.log(`Assigning ${senderName} to ${roomName}`)
     var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName},Not Joined"]`);
     if (attendeeEl == null) {
         var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName}"]`);
     }
     reactMouseOver(attendeeEl);
+    console.log("Waiting for moveToButton")
     var moveToButtonEl = await waitForElm('.bo-room-item-attendee__tools > button');
     moveToButtonEl.click();
+    console.log("Clicked moveToButton")
+    console.log("Waiting for selectRoomEl")
     var selectRoomEl = await waitForElm(`.zmu-data-selector-item[aria-label^="${roomName},"]`);
     selectRoomEl.click();
+    console.log("Waiting for selectRoomEl")
+    console.log("Clicked selectRoomEl")
 }
 
 // https://stackoverflow.com/a/61511955/286021
@@ -165,6 +171,8 @@ var nameChange$ = store$.pipe(
     rxjs.operators.flatMap((changedNames) => rxjs.from(changedNames)),
 )
 
+var moveRequestQueryFromInitialNames$ = new rxjs.Subject();
+
 var moveRequestQueryFromNameChange$ = nameChange$.pipe(
     // Only operate on names that change to a format requesting a room
     rxjs.operators.filter((changedNamePair) => {
@@ -207,6 +215,7 @@ var moveRequestQueryFromChat$ = chatMoveRequestCommand$.pipe(
 var moveRequestQuery$ = rxjs.merge(
     moveRequestQueryFromChat$,
     moveRequestQueryFromNameChange$,
+    moveRequestQueryFromInitialNames$,
 )
 
 var [moveRequestSimpleIdQuery$, moveRequestStringQuery$] = moveRequestQuery$.pipe(
@@ -269,6 +278,10 @@ var moveRequestChecked$ = moveRequestResolved$.pipe(
             var room = storeState.breakoutRoom.roomList.filter(room => room.name == roomName)[0]
             var roomAttendeesByName = room.attendeeIdList.map(attendeeId => guidSenderMap.get(attendeeId));
 
+            if (roomAttendeesByName.includes(sender) && src == 'initialName') {
+                // Don't return errors
+                return null
+            }
 
             if (roomAttendeesByName.includes(sender)) {
                 return { error: `⚠️ (from ${src})\n "${sender}" already in "${room.name}"\n` }
@@ -281,6 +294,9 @@ var moveRequestChecked$ = moveRequestResolved$.pipe(
             return { sender, roomName, src }
         }
     ),
+    rxjs.operators.filter(item =>
+        item != null
+    )
 )
 
 var [moveRequestInvalidError$, moveRequestValid$] = moveRequestChecked$.pipe(
@@ -334,3 +350,20 @@ if (chatPaneButton) {
 setTimeout(_ => {
     chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat "!ls" in main meeting chat to list rooms and commands.\n Use a "!mv" in main meeting chat or append a [<room id>] in to your name to choose a room.\n Chat commands only work in main meeting however renames are detected in main meeting or breakout rooms. \n Use the End Meeting button in the Breakout Room to return to the main meeting in order to use chat commands\n\nHost(s), please rename and dedicate this client for the Bot and use another session to participate in the meeting.`)
 }, 100)
+
+// Move users after bot initialization
+setTimeout(_ => {
+    internalStore.getState().attendeesList.attendeesList.map(
+        attendee => attendee.displayName
+    ).filter(displayName => /\[.+\]/.test(displayName)).map(
+        name => {
+            return {
+                sender: name,
+                targetRoomQuery: name.match(/\[(.+)\]/)[1],
+                src: 'initialName'
+            }
+        }
+    ).forEach(moveRequest => {
+        moveRequestQueryFromInitialNames$.next(moveRequest);
+    });
+}, 110)

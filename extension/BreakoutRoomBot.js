@@ -348,7 +348,7 @@ if (chatPaneButton) {
 }
 
 setTimeout(_ => {
-    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat "!ls" in main meeting chat to list rooms and commands.\n Use a "!mv" in main meeting chat or append a [<room id>] in to your name to choose a room.\n Chat commands only work in main meeting however renames are detected in main meeting or breakout rooms. \n Use the End Meeting button in the Breakout Room to return to the main meeting in order to use chat commands\n\nHost(s), please rename and dedicate this client for the Bot and use another session to participate in the meeting.`)
+    chatboxSend(`Breakout Rooms Bot for Zoom Meetings ${BREAKOUT_ROOM_BOT_VERSION} activated.\n\nAttendees, chat "!ls" in main meeting chat to list rooms and commands.\nUse a "!mv" in main meeting chat or append a [<room id>] or [room name] in to your name to choose a room.\nChat commands only work in main meeting\n however renames are detected anywhere.\nUse the End Meeting button in the Breakout Room to return to the main meeting in order to use chat commands\n\nHost(s), please rename and dedicate this client for the bot and use another session to participate in the meeting.`)
 }, 100)
 
 // Move users after bot initialization

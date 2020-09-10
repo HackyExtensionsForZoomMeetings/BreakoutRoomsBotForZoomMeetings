@@ -335,9 +335,14 @@ var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscrib
             chatboxSend(error);
             return;
         }
-        assignedUnjoinedUserToBreakoutRoom(sender, roomName);
-        chatboxSend(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n`)
-        chatboxSend("❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n");
+        try {
+            assignedUnjoinedUserToBreakoutRoom(sender, roomName);
+            chatboxSend(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n`)
+            chatboxSend("❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n");
+        } catch {
+
+        }
+
     }
 )
 

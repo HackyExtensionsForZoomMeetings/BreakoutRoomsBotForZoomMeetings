@@ -1,0 +1,25 @@
+{
+  "name": "Loadtest Breakout Room",
+  "version": "1",
+  "description": "TEST ONLY",
+  "permissions": [
+    "activeTab",
+    "declarativeContent"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    "LoadBot.js"
+  ],
+  "icons": {
+    "128": "icon.png"
+  },
+  "manifest_version": 2
+}

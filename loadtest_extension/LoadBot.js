@@ -65,6 +65,12 @@ if (chatPaneButton) {
     chatPaneButton.click();
 }
 
+// Open the participants pane if it isn't already open.
+var participantsPaneButton = document.querySelector('[aria-label^="open the manage participants list pane"]')
+if (participantsPaneButton) {
+    participantsPaneButton.click();
+}
+
 loadTestInteval = setInterval(() => {
     chatboxSend(`!mv ${getRandomInt(1, 10)}`)
 }, 1000)

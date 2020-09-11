@@ -26,6 +26,34 @@ function chatboxSend(msg) {
     chatboxElement.dispatchEvent(oEvent);
 }
 
+async function renameSend(newName) {
+    const newNameElement = await waitForElm("#newname")
+    const nativeTextAreaValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+    nativeTextAreaValueSetter.call(newNameElement, newName);
+    newNameElement.dispatchEvent(new Event('input', { bubbles: true }));
+
+    const oEvent = document.createEvent('KeyboardEvent');
+    // Chromium Hack
+    Object.defineProperty(oEvent, 'keyCode', {
+        get: function () {
+            return this.keyCodeVal;
+        }
+    });
+    Object.defineProperty(oEvent, 'which', {
+        get: function () {
+            return this.keyCodeVal;
+        }
+    });
+
+    const k = 13;
+
+    oEvent.initKeyboardEvent("keydown", true, true, document.defaultView, k, k, "", "", false, "");
+
+    oEvent.keyCodeVal = k;
+
+    newNameElement.dispatchEvent(oEvent);
+}
+
 function reactMouseOver(el) {
     var oEvent = document.createEvent('MouseEvent');
     oEvent.initMouseEvent("mouseover", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -70,6 +98,16 @@ var participantsPaneButton = document.querySelector('[aria-label^="open the mana
 if (participantsPaneButton) {
     participantsPaneButton.click();
 }
+
+reactMouseOver(document.querySelector('#participants-list-0'))
+
+async function renameForTest() {
+    var renameEl = await waitForElm('.button-margin-right.ax-outline-blue.btn.btn-xs.btn-primary')
+    renameEl.click()
+    await waitForElm('#newname')
+    renameSend(`Load Test Bot #${getRandomInt(10000, 99999)}`)
+}
+renameForTest();
 
 loadTestInteval = setInterval(() => {
     chatboxSend(`!mv ${getRandomInt(1, 10)}`)

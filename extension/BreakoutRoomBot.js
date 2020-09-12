@@ -333,11 +333,13 @@ var moveFulfillChatResponse$ = new rxjs.Subject();
 
 var moveFulfillChatResponseBuffered$ = moveFulfillChatResponse$.pipe(
     rxjs.operators.bufferTime(1000),
+    rxjs.operators.filter(messages => messages.length != 0),
     rxjs.operators.map( messages => {
         if (messages.length == 1) {
             return messages[0]
         } else {
-            return `🎯 Assigned ${messages.length} users over the last second.`
+            return `🎯 Assigned ${messages.length} users over the last second.\nYou all may need to press the Breakout Rooms button
+            to join the newly assigned breakout meeting.\n`
         }
     })
 );

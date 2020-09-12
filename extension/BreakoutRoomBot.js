@@ -123,13 +123,38 @@ var breakoutRoomListReply$ = breakoutRoomListCommand$.pipe(
         (_, storeState) =>
             "📜 Breakout Room List\n" +
             "Chat \"!ls\" to see this list\n" +
-            "❇️ [ID] Room Name (User(s) in Room)\n" +
+            "ID. Room Name (Attendee(s) in Room)\n=============\n" +
             storeState.breakoutRoom.roomList.map(
-                (room, index) => `❇️ [${index + 1}] ${room.name} (${storeState.attendeesList.attendeesList.filter(attendee => attendee.bid == room.boId).length} user(s))`
+                (room, index) => `⬛ ${index + 1}. ${room.name} (${storeState.attendeesList.attendeesList.filter(attendee => attendee.bid == room.boId).length} attendee(s))`
             ).join('\n') +
             "\n" +
-            "Chat \"!mv ID\" or append \"[ID]\" to your name to be assigned to the breakout room.\n" +
-            "End of List"
+            "Chat \"!mv ID\" or append \"[ID]\" to your name to be assigned to the breakout room."
+    ),
+)
+
+var breakoutRoomListUsersInRoomReply$ = userMessageMap$.pipe(
+    rxjs.operators.filter(({ message }) => /!ls (.+)/.test(message)),
+    rxjs.operators.withLatestFrom(
+        store$,
+        ({ message }, storeState) => {
+            var targetRoomQuery = message.match(/!ls (.+)/)[1];
+
+            var results = fuzzysort.go(targetRoomQuery, storeState.breakoutRoom.roomList, { key: 'name' });
+            if (results.length == 0) {
+                return `⚠️ No room names matched for query: ${targetRoomQuery}!\n`
+            }
+            var room = results[0].obj;
+            var attendeesInRoom = storeState.attendeesList.attendeesList.filter(attendee => attendee.bid == room.boId)
+
+            if (attendeesInRoom.length == 0) {
+                return `📜 No attendees in ⬛ ${room.name}`
+            }
+
+            return `📜 Attendees in ⬛ ${room.name}\n` +
+                attendeesInRoom.map(
+                    attendee => `👤 ${attendee.displayName}`
+                ).join('\n')
+        }
     ),
 )
 
@@ -329,11 +354,11 @@ var moveFulfillChatResponse$ = new rxjs.Subject();
 var moveFulfillChatResponseBuffered$ = moveFulfillChatResponse$.pipe(
     rxjs.operators.bufferTime(1000),
     rxjs.operators.filter(messages => messages.length != 0),
-    rxjs.operators.map( messages => {
+    rxjs.operators.map(messages => {
         if (messages.length == 1) {
             return messages[0]
         } else {
-            return `🎯 Assigned ${messages.length} users over the last second.\nAttendees may need to press the Breakout Rooms button to join their newly assigned breakout meeting.\n`
+            return `🎯🎯🎯 Assigned ${messages.length} users over the last second.\n❓ Attendees may need to press the Breakout Rooms button to join their newly assigned breakout room.\n`
         }
     })
 );
@@ -348,6 +373,10 @@ var breakoutRoomListReplySubscription = breakoutRoomListReply$.subscribe(
     (message) => chatboxSend(message)
 )
 
+var breakoutRoomListReplySubscription = breakoutRoomListUsersInRoomReply$.subscribe(
+    (message) => chatboxSend(message)
+)
+
 var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscribe(
     ({ sender, roomName, src, error, senderUserId, roomUuid }) => {
         if (error) {
@@ -357,15 +386,15 @@ var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscrib
         try {
             // ~ 2ms
             assignUserIdToBreakoutRoomUuid(senderUserId, roomUuid)
-            moveFulfillChatResponse$.next(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n` +
-            "❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n")
+            moveFulfillChatResponse$.next(`🎯 (from ${src})\n Assigning\n👤 "${sender}"\nto\n⬛ "${roomName}"\n` +
+                "❓ Attendee may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n")
         } catch {
 
         }
     }
 )
 
-var moveFullfillChatResponseSubscription = moveFulfillChatResponseBuffered$.subscribe( message => {
+var moveFullfillChatResponseSubscription = moveFulfillChatResponseBuffered$.subscribe(message => {
     // ~ 30ms
     chatboxSend(message)
 })

@@ -1,3 +1,7 @@
+# **THIS BOT IS DEPRECATED**
+
+[Zoom's September 21, 2020 release will have native breakout room switching without Host-assistance](https://www.reddit.com/r/Zoom/comments/irkm82/selfselect_breakout_room/). With that said, maybe the internals can be repurposed for something new that Zoom hasn't enabled? 
+
 # Breakout Room Bot for Zoom Meetings Chrome Extension
 
 *Making it possible for **everyone** to walk around to other Breakout Rooms in a Zoom Meeting without the aid of the Host*

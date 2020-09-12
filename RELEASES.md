@@ -2,6 +2,8 @@
 
 * Reworked bot to use internal Zoom command websocket connection to assign and reassign users to breakout rooms. ~100ms per assignment to 2ms per assignment! Greatly reduced safety latency to 10ms as a result.
 * Buffered chat messages per second for assignment notices (26ms per second vs 26ms per user assignment)
+* Enhanced `!ls` to also take arguments for room name to match and list users
+* Enhanced `!ls` to list number of users in a breakout room
 
 # 2020.09.6 2020-09-08
 

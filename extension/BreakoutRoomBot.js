@@ -130,10 +130,12 @@ var breakoutRoomListReply$ = breakoutRoomListCommand$.pipe(
         (_, storeState) =>
             "📜 Breakout Room List\n" +
             "Chat \"!ls\" to see this list\n" +
+            "❇️ [ID] Room Name (User(s) in Room)\n" +
             storeState.breakoutRoom.roomList.map(
-                (room, index) => `❇️ Chat "!mv ${index + 1}" into Group Chat \n in the main session or \n append "[${index + 1}]" to your name \n to be assigned to Breakout Room "${room.name}"`
+                (room, index) => `❇️ [${index + 1}] ${room.name} (${storeState.attendeesList.attendeesList.filter(attendee => attendee.bid == room.boId).length} user(s))`
             ).join('\n') +
             "\n" +
+            "Chat \"!mv ID\" or append \"[ID]\" to your name to be assigned to the breakout room " +
             "End of List"
     ),
 )

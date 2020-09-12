@@ -338,8 +338,7 @@ var moveFulfillChatResponseBuffered$ = moveFulfillChatResponse$.pipe(
         if (messages.length == 1) {
             return messages[0]
         } else {
-            return `🎯 Assigned ${messages.length} users over the last second.\nYou all may need to press the Breakout Rooms button
-            to join the newly assigned breakout meeting.\n`
+            return `🎯 Assigned ${messages.length} users over the last second.\nAttendees may need to press the Breakout Rooms button to join their newly assigned breakout meeting.\n`
         }
     })
 );

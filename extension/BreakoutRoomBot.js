@@ -105,6 +105,7 @@ var userMessageMap$ = chat$.pipe(
     rxjs.operators.map(chatState => {
         return {
             sender: chatState.slice(-1)[0].sender,
+            senderUserId: chatState.slice(-1)[0].senderId,
             message: chatState.slice(-1)[0].chatMsgs.slice(-1)[0],
         }
     }),
@@ -113,7 +114,7 @@ var userMessageMap$ = chat$.pipe(
 )
 
 var versionCommand$ = userMessageMap$.pipe(
-    rxjs.operators.filter(({ _, message }) => message == "!version"),
+    rxjs.operators.filter(({ message }) => message == "!version"),
 )
 
 var versionReply$ = versionCommand$.pipe(
@@ -121,7 +122,7 @@ var versionReply$ = versionCommand$.pipe(
 )
 
 var breakoutRoomListCommand$ = userMessageMap$.pipe(
-    rxjs.operators.filter(({ _, message }) => message == "!ls"),
+    rxjs.operators.filter(({ message }) => message == "!ls"),
 )
 
 var breakoutRoomListReply$ = breakoutRoomListCommand$.pipe(
@@ -159,7 +160,7 @@ var nameChange$ = store$.pipe(
                 changedNames.push({
                     oldDisplayName: oldDisplayName,
                     newDisplayName: displayName,
-                    userId: userId,
+                    senderUserId: userId,
                 });
             }
         }
@@ -197,19 +198,29 @@ var moveRequestQueryFromNameChange$ = nameChange$.pipe(
     rxjs.operators.map((changedNamePair) => {
         const regex = /\[(.+)\]/;
         var targetRoomQuery = changedNamePair.newDisplayName.match(regex)[1]
-        return { sender: changedNamePair.newDisplayName, targetRoomQuery: targetRoomQuery, src: 'nameChange' }
+        return {
+            senderUserId: changedNamePair.senderUserId,
+            sender: changedNamePair.newDisplayName,
+            targetRoomQuery,
+            src: 'nameChange'
+        }
     }),
 )
 
 var chatMoveRequestCommand$ = userMessageMap$.pipe(
-    rxjs.operators.filter(({ _, message }) => message.startsWith("!mv ")),
+    rxjs.operators.filter(({ message }) => message.startsWith("!mv ")),
 )
 
 var moveRequestQueryFromChat$ = chatMoveRequestCommand$.pipe(
-    rxjs.operators.map(({ sender, message }) => {
+    rxjs.operators.map(({ sender, message, senderUserId }) => {
         const regex = /!mv (.+)/;
         var targetRoomQuery = message.match(regex)[1]
-        return { sender: sender, targetRoomQuery: targetRoomQuery, src: 'chat' }
+        return {
+            sender: sender,
+            senderUserId: senderUserId,
+            targetRoomQuery: targetRoomQuery,
+            src: 'chat'
+        }
     }),
 )
 
@@ -226,16 +237,19 @@ var [moveRequestSimpleIdQuery$, moveRequestStringQuery$] = moveRequestQuery$.pip
 var moveRequestSimpleIdQueryResolved$ = moveRequestSimpleIdQuery$.pipe(
     rxjs.operators.withLatestFrom(
         store$,
-        ({ sender, targetRoomQuery, src }, storeState) => {
+        ({ sender, targetRoomQuery, src, senderUserId }, storeState) => {
             var roomIndex = parseInt(targetRoomQuery, 10);
 
             if (roomIndex == 0 || roomIndex > storeState.breakoutRoom.roomList.length) {
                 return { error: `⚠️ (from ${src})\n @${sender} Room ID "${targetRoomQuery}" out of range!\n` }
             }
 
-            var roomName = storeState.breakoutRoom.roomList[roomIndex - 1].name;
+            var room = storeState.breakoutRoom.roomList[roomIndex - 1]
 
-            return { sender, roomName, src }
+            var roomName = room.name
+            var roomUuid = room.boId
+
+            return { sender, roomName, src, senderUserId, roomUuid }
         }
     ),
 )
@@ -243,15 +257,15 @@ var moveRequestSimpleIdQueryResolved$ = moveRequestSimpleIdQuery$.pipe(
 var moveRequestStringQueryResolved$ = moveRequestStringQuery$.pipe(
     rxjs.operators.withLatestFrom(
         store$,
-        ({ sender, targetRoomQuery, src }, storeState) => {
-            var roomNames = storeState.breakoutRoom.roomList.map(room => room.name);
-            var results = fuzzysort.go(targetRoomQuery, roomNames);
+        ({ sender, targetRoomQuery, src, senderUserId }, storeState) => {
+            var results = fuzzysort.go(targetRoomQuery, storeState.breakoutRoom.roomList, {key: 'name'} );
             if (results.length == 0) {
                 return { error: `⚠️ (from ${src})\n @${sender} No names matched for query: ${targetRoomQuery}!\n` }
             }
-            var roomName = results[0].target;
+            var roomName = results[0].obj.name;
+            var roomUuid = results[0].obj.boId;
 
-            return { sender, roomName, src }
+            return { sender, roomName, src, senderUserId, roomUuid }
         }
     ),
 )
@@ -269,7 +283,7 @@ var [moveRequestResolveError$, moveRequestResolved$] = moveRequestResolved$.pipe
 var moveRequestChecked$ = moveRequestResolved$.pipe(
     rxjs.operators.withLatestFrom(
         store$,
-        ({ sender, roomName, src }, storeState) => {
+        ({ sender, roomName, src, senderUserId, roomUuid  }, storeState) => {
             var guidSenderMap = new Map(
                 storeState.attendeesList.attendeesList.map(
                     attendee => [attendee.userGUID, attendee.displayName]
@@ -292,7 +306,7 @@ var moveRequestChecked$ = moveRequestResolved$.pipe(
                 return { error: `⚠️ (from ${src})\n "${sender}" must have a unique name in the meeting for this bot to operate. "${sender}"s, please rename to unique names.\n` }
             }
 
-            return { sender, roomName, src }
+            return { sender, roomName, src, senderUserId, roomUuid  }
         }
     ),
     rxjs.operators.filter(item =>
@@ -331,15 +345,15 @@ var breakoutRoomListReplySubscription = breakoutRoomListReply$.subscribe(
 )
 
 var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscribe(
-    ({ sender, roomName, src, error }) => {
+    ({ sender, roomName, src, error, senderUserId, roomUuid }) => {
         if (error) {
             chatboxSend(error);
             return;
         }
         try {
             assignedUnjoinedUserToBreakoutRoom(sender, roomName);
-            chatboxSend(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n`+
-            "❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n");
+            chatboxSend(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n` +
+                "❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n");
         } catch {
 
         }

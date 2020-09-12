@@ -348,6 +348,19 @@ var moveRequestErrorsAndSuccess$ = rxjs.merge(
     moveRequestValidTimeSliceQueue$
 )
 
+var moveFulfillChatResponse$ = new rxjs.Subject();
+
+var moveFulfillChatResponseBuffered$ = moveFulfillChatResponse$.pipe(
+    rxjs.operators.bufferTime(1000),
+    rxjs.operators.map( messages => {
+        if (messages.length == 1) {
+            return messages[0]
+        } else {
+            return `🎯 Assigned ${messages.length} users over the last second.`
+        }
+    })
+);
+
 // SUBSCRIPTIONS
 
 var versionReplySubscription = versionReply$.subscribe(
@@ -365,16 +378,22 @@ var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscrib
             return;
         }
         try {
+            // old UI Automation Way
             // assignedUnjoinedUserToBreakoutRoom(sender, roomName);
+            // ~ 2ms
             assignUserIdToBreakoutRoomUuid(senderUserId, roomUuid)
-            chatboxSend(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n` +
-                "❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n");
+            moveFulfillChatResponse$.next(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n` +
+            "❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n")
         } catch {
 
         }
-
     }
 )
+
+var moveFullfillChatResponseSubscription = moveFulfillChatResponseBuffered$.subscribe( message => {
+    // ~ 30ms
+    chatboxSend(message)
+})
 
 // Open the chat pane if it isn't already open.
 var chatPaneButton = document.querySelector('[aria-label^="open the chat pane"]')

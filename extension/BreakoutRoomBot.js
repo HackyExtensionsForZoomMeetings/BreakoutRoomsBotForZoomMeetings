@@ -142,7 +142,7 @@ var nameChange$ = store$.pipe(
     rxjs.operators.map(s => s.attendeesList.attendeesList),
     rxjs.operators.map(list => new Map(
         list.map(
-            attendee => [attendee.userGUID, attendee.displayName]
+            attendee => [attendee.userId, attendee.displayName]
         )
     )
     ),
@@ -153,12 +153,13 @@ var nameChange$ = store$.pipe(
 
         var changedNames = [];
 
-        for (let [guid, displayName] of attendeesMap.entries()) {
-            let oldDisplayName = acc.previousMap.get(guid);
+        for (let [userId, displayName] of attendeesMap.entries()) {
+            let oldDisplayName = acc.previousMap.get(userId);
             if (oldDisplayName != undefined && oldDisplayName != displayName) {
                 changedNames.push({
                     oldDisplayName: oldDisplayName,
                     newDisplayName: displayName,
+                    userId: userId,
                 });
             }
         }

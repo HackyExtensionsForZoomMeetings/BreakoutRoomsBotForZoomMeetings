@@ -320,10 +320,6 @@ var moveRequestChecked$ = moveRequestResolved$.pipe(
                 return { error: `⚠️ (from ${src})\n "${sender}" already in "${room.name}"\n` }
             }
 
-            if (Array.from(guidSenderMap.values()).filter(x => x == sender).length > 1) {
-                return { error: `⚠️ (from ${src})\n "${sender}" must have a unique name in the meeting for this bot to operate. "${sender}"s, please rename to unique names.\n` }
-            }
-
             return { sender, roomName, src, senderUserId, roomUuid }
         }
     ),
@@ -336,7 +332,7 @@ var [moveRequestInvalidError$, moveRequestValid$] = moveRequestChecked$.pipe(
     rxjs.operators.partition(({ error }) => error),
 )
 
-var moveRequestValidTimeSlice$ = rxjs.interval(150);
+var moveRequestValidTimeSlice$ = rxjs.interval(10);
 
 var moveRequestValidTimeSliceQueue$ = rxjs.zip(moveRequestValid$, moveRequestValidTimeSlice$).pipe(
     rxjs.operators.map(([s, _d]) => s)

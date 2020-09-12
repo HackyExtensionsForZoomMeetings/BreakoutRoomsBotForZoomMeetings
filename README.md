@@ -41,6 +41,7 @@ If you're in a breakout room, you can return to the main or root Zoom meeting fr
 
 * `!ls` List Rooms
     * Alternatively, the Host can share screen a slide or image with a list of room names.
+    * This also takes an argument to list users in a particular room name.
 * Switching Rooms as a non-host or non-cohost (this is whole reason for this bot's existence)
     * Two methods
         * *`!mv <room id>`* or *`!mv <room name>`*

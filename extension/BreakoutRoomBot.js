@@ -44,25 +44,6 @@ function reactMouseOver(el) {
     el.dispatchEvent(oEvent);
 }
 
-// This function uses GUI clicking stuff
-async function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
-    console.log(`Assigning ${senderName} to ${roomName}`)
-    var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName},Not Joined"]`);
-    if (attendeeEl == null) {
-        var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName}"]`);
-    }
-    reactMouseOver(attendeeEl);
-    console.log("Waiting for moveToButton")
-    var moveToButtonEl = await waitForElm('.bo-room-item-attendee__tools > button');
-    moveToButtonEl.click();
-    console.log("Clicked moveToButton")
-    console.log("Waiting for selectRoomEl")
-    var selectRoomEl = await waitForElm(`.zmu-data-selector-item[aria-label^="${roomName},"]`);
-    selectRoomEl.click();
-    console.log("Waiting for selectRoomEl")
-    console.log("Clicked selectRoomEl")
-}
-
 // This function uses websockets
 function assignUserIdToBreakoutRoomUuid(senderUserId, roomUuid) {
     console.log(`Assigning ${senderUserId} to ${roomUuid}`)
@@ -378,8 +359,6 @@ var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscrib
             return;
         }
         try {
-            // old UI Automation Way
-            // assignedUnjoinedUserToBreakoutRoom(sender, roomName);
             // ~ 2ms
             assignUserIdToBreakoutRoomUuid(senderUserId, roomUuid)
             moveFulfillChatResponse$.next(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n` +

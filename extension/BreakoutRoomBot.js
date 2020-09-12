@@ -128,7 +128,7 @@ var breakoutRoomListReply$ = breakoutRoomListCommand$.pipe(
                 (room, index) => `❇️ [${index + 1}] ${room.name} (${storeState.attendeesList.attendeesList.filter(attendee => attendee.bid == room.boId).length} user(s))`
             ).join('\n') +
             "\n" +
-            "Chat \"!mv ID\" or append \"[ID]\" to your name to be assigned to the breakout room " +
+            "Chat \"!mv ID\" or append \"[ID]\" to your name to be assigned to the breakout room.\n" +
             "End of List"
     ),
 )

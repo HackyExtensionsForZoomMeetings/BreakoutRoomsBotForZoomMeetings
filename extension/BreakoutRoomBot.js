@@ -44,6 +44,7 @@ function reactMouseOver(el) {
     el.dispatchEvent(oEvent);
 }
 
+// This function uses GUI clicking stuff
 async function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
     console.log(`Assigning ${senderName} to ${roomName}`)
     var attendeeEl = document.querySelector(`.bo-room-item-attendee[aria-label|="${senderName},Not Joined"]`);
@@ -60,6 +61,23 @@ async function assignedUnjoinedUserToBreakoutRoom(senderName, roomName) {
     selectRoomEl.click();
     console.log("Waiting for selectRoomEl")
     console.log("Clicked selectRoomEl")
+}
+
+// This function uses websockets
+function assignUserIdToBreakoutRoomUuid(senderUserId, roomUuid) {
+    console.log(`Assigning ${senderUserId} to ${roomUuid}`)
+    var storeState = internalStore.getState();
+    var sender = storeState.attendeesList.attendeesList.find(({ userId }) => userId == senderUserId)
+    var senderInBreakoutRoom = storeState.breakoutRoom.roomList.flatMap(room => room.attendeeIdList).includes(sender.userGUID)
+    if (senderInBreakoutRoom) {
+        window.commandSocket.send(JSON.stringify(
+            { "evt": 4181, "body": { "targetBID": roomUuid, "targetID": senderUserId }, "seq": 0 }
+        ))
+    } else {
+        window.commandSocket.send(JSON.stringify(
+            { "evt": 4179, "body": { "targetBID": roomUuid, "targetID": senderUserId }, "seq": 0 }
+        ))
+    }
 }
 
 // https://stackoverflow.com/a/61511955/286021
@@ -258,7 +276,7 @@ var moveRequestStringQueryResolved$ = moveRequestStringQuery$.pipe(
     rxjs.operators.withLatestFrom(
         store$,
         ({ sender, targetRoomQuery, src, senderUserId }, storeState) => {
-            var results = fuzzysort.go(targetRoomQuery, storeState.breakoutRoom.roomList, {key: 'name'} );
+            var results = fuzzysort.go(targetRoomQuery, storeState.breakoutRoom.roomList, { key: 'name' });
             if (results.length == 0) {
                 return { error: `⚠️ (from ${src})\n @${sender} No names matched for query: ${targetRoomQuery}!\n` }
             }
@@ -283,7 +301,7 @@ var [moveRequestResolveError$, moveRequestResolved$] = moveRequestResolved$.pipe
 var moveRequestChecked$ = moveRequestResolved$.pipe(
     rxjs.operators.withLatestFrom(
         store$,
-        ({ sender, roomName, src, senderUserId, roomUuid  }, storeState) => {
+        ({ sender, roomName, src, senderUserId, roomUuid }, storeState) => {
             var guidSenderMap = new Map(
                 storeState.attendeesList.attendeesList.map(
                     attendee => [attendee.userGUID, attendee.displayName]
@@ -306,7 +324,7 @@ var moveRequestChecked$ = moveRequestResolved$.pipe(
                 return { error: `⚠️ (from ${src})\n "${sender}" must have a unique name in the meeting for this bot to operate. "${sender}"s, please rename to unique names.\n` }
             }
 
-            return { sender, roomName, src, senderUserId, roomUuid  }
+            return { sender, roomName, src, senderUserId, roomUuid }
         }
     ),
     rxjs.operators.filter(item =>
@@ -351,7 +369,8 @@ var moveRequestFulfillNotifySubscription = moveRequestErrorsAndSuccess$.subscrib
             return;
         }
         try {
-            assignedUnjoinedUserToBreakoutRoom(sender, roomName);
+            // assignedUnjoinedUserToBreakoutRoom(sender, roomName);
+            assignUserIdToBreakoutRoomUuid(senderUserId, roomUuid)
             chatboxSend(`🎯 (from ${src})\n Assigning\n "${sender}"\n to\n "${roomName}"\n` +
                 "❓ You may need to press the Breakout Rooms button\n to join the newly assigned breakout meeting.\n❓ Chat \"!ls\" to list rooms and other commands.\n");
         } catch {

@@ -18,14 +18,14 @@ It is strongly recommend you do a dry run with some associates first!
     * Alternatively, clone or download a copy of this repository and look for instructions online for loading "unpacked extensions" into Chrome or any other Chromium browser. Load the `extension` folder.
 2. Go to the Zoom Meeting as the Host in a "Join from Browser" Zoom Meetings Web Client.
     * Button to launch extension only works on `*.zoom.us` domains.
-3. Ensure the Breakout Rooms are already open and have started.
+3. Ensure the Breakout Rooms are already open and have started. The red Close All Rooms button should be present in the Breakout Rooms window.
 4. Click the extension button in the menu bar to open the popup
     ![](launch.png)
 5. Click the button to "Attach and Launch Breakout Room Bot"
 
 After:
 
-* Do not close the Breakout Rooms and Chat Window while the bot is in operation.
+* Do not close the Chat Window while the bot is in operation.
 * Unless you like cacophony, do not join audio in this client. You can leave audio by clicking the "^" next to the microphone icon and selecting "Leave `<Something>` Audio".
 * Use another Zoom client on the system to actually participate in the meeting. You can safely make this other client a Co-Host if it isn't already from the attached bot-controlled web client UI.
 

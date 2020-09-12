@@ -86,17 +86,12 @@ function waitForElm(selector) {
 
 var internalStore = document.getElementById('root')._reactRootContainer._internalRoot.current.child.pendingProps.store;
 
-var store$ = getStoreObservable(internalStore).pipe(
-    rxjs.operators.publish(),
-    rxjs.operators.refCount(),
-)
+var store$ = getStoreObservable(internalStore)
 
 var chat$ = store$.pipe(
     rxjs.operators.map(s => s.chat.meetingChat),
     rxjs.operators.distinctUntilChanged(),
     rxjs.operators.skip(1),
-    rxjs.operators.publish(),
-    rxjs.operators.refCount(),
 )
 
 // Transforms the user to map stuff to be a user -> name pair like IRC/etc
@@ -108,8 +103,6 @@ var userMessageMap$ = chat$.pipe(
             message: chatState.slice(-1)[0].chatMsgs.slice(-1)[0],
         }
     }),
-    rxjs.operators.publish(),
-    rxjs.operators.refCount(),
 )
 
 var versionCommand$ = userMessageMap$.pipe(
